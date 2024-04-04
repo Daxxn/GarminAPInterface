@@ -1,4 +1,4 @@
-﻿using MVVMLibraryFW;
+﻿using MVVMLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,46 +12,68 @@ using System.Runtime.InteropServices;
 using ArduinoSerialLibrary;
 using System.Windows.Controls;
 using System.Windows;
+using TBMAutopilotDashboard.SimUtils;
+using TBMAutopilotDashboard.Models.SimConnectData;
+using TBMAutopilotDashboard.Models;
+using TBMAutopilotDashboard.Models.Enums;
+using TBMAutopilotDashboard.Models.Enums.Constants;
+using TBMAutopilotDashboard.Models.State;
+using SettingsLibrary;
+using System.Windows.Markup;
 
 namespace TBMAutopilotDashboard
 {
+   public enum DataRequestID
+   {
+      ID_0 = 0, ID_1 = 1, ID_2 = 2, ID_3 = 3,
+   };
+
    public class MainViewModel : ViewModel, IBaseSimConnectWrapper
    {
       #region - Fields & Properties
+      private SettingsModel _settings;
+      private readonly InputDataMap _inputDataMap = InputDataMap.Instance;
+
       public const string _name = "TBMAutopilot-Client";
       /// <summary>
       /// User-defined win32 event?
+      /// It's not clear what this variable is for.
+      /// <para/>
+      /// Just part of the encantation I guess...
       /// </summary>
       #region SimConnectWrapper
       public const int WM_USER_SIMCONNECT = 0x0402;
       /// <summary>
       /// Window Handle (Still not sure what do...)
       /// </summary>
-      private IntPtr Wnd = new IntPtr(0);
+      private IntPtr Wnd = IntPtr.Zero;
       #endregion
 
-      /// SimConnect object
+      /// <summary>
+      /// SimConnect API Object
+      /// </summary>
       private SimConnect SimConnect = null;
       private bool _connected;
       private bool _paused = true;
+      private bool _getInputData = false;
 
-      private ObservableCollection<Variable> _variableRequests = new ObservableCollection<Variable>();
-      private ObservableCollection<Message> _messages = new ObservableCollection<Message>();
+      private GarminPanelModel _panelStates = new GarminPanelModel();
 
-      private Variable _selectedVariable;
+      private MessageController _messages = new MessageController(50);
 
       private PortStatus _selectedPort;
       private ObservableCollection<PortStatus> _ports;
 
-
       #region Command Bindings
-      public BaseCommand ConnectCmd { get; private set; }
-      public BaseCommand DisconnectCmd { get; private set; }
-      public BaseCommand PauseCmd { get; private set; }
-      public BaseCommand StartSerialCmd { get; private set; }
-      public BaseCommand DebugStartSerialCmd { get; private set; }
-      public BaseCommand StopSerialCmd { get; private set; }
-      public BaseCommand RefreshPortsCmd { get; private set; }
+      public Command ConnectCmd { get; private set; }
+      public Command DisconnectCmd { get; private set; }
+      public Command PauseCmd { get; private set; }
+      public Command StartSerialCmd { get; private set; }
+      public Command DebugStartSerialCmd { get; private set; }
+      public Command StopSerialCmd { get; private set; }
+      public Command RefreshPortsCmd { get; private set; }
+      public Command GetInputEventsCMD { get; private set; }
+      public Command PanelTestCmd { get; private set; }
       #endregion
 
       #region Constants
@@ -59,69 +81,74 @@ namespace TBMAutopilotDashboard
       public uint _timerInterval = 100;
       #endregion
 
-      public Timer Timer { get; private set; }
+      // This timer will probably be used as a sim startup delay timer.
+      // Due to the posibility of multiple sim start and stop event when loading in,
+      // it would be good to delay any automatic connection until after all the BS has stopped.
+      //public Timer Timer { get; private set; }
 
       #region Test Buttons
-      public Dictionary<string, bool> _testButtons = new Dictionary<string, bool>
-      {
-         { "HDG", false },
-         { "APR", false },
-         { "BC", false },
-         { "NAV", false },
-         { "FD", false },
-         { "BANK", false },
-         { "AP", false },
-         { "YD", false },
-         { "ALT", false },
-         { "VS", false },
-         { "FLC", false }
-      };
-      public Dictionary<uint, string> _testButtonIndex = new Dictionary<uint, string>
-      {
-         { 0, "HDG" },
-         { 1, "APR" },
-         { 2, "BC" },
-         { 3, "NAV" },
-         { 4, "FD" },
-         { 5, "BANK" },
-         { 6, "AP" },
-         { 7, "YD" },
-         { 8, "ALT" },
-         { 9, "VS" },
-         { 10, "FLC" }
-      };
+      //public Dictionary<string, bool> _testButtons = new Dictionary<string, bool>
+      //{
+      //   { "HDG", false },
+      //   { "APR", false },
+      //   { "BC", false },
+      //   { "NAV", false },
+      //   { "FD", false },
+      //   { "BANK", false },
+      //   { "AP", false },
+      //   { "YD", false },
+      //   { "ALT", false },
+      //   { "VS", false },
+      //   { "FLC", false }
+      //};
+      //public Dictionary<uint, string> _testButtonIndex = new Dictionary<uint, string>
+      //{
+      //   { 0, "HDG" },
+      //   { 1, "APR" },
+      //   { 2, "BC" },
+      //   { 3, "NAV" },
+      //   { 4, "FD" },
+      //   { 5, "BANK" },
+      //   { 6, "AP" },
+      //   { 7, "YD" },
+      //   { 8, "ALT" },
+      //   { 9, "VS" },
+      //   { 10, "FLC" }
+      //};
+      #endregion
 
       public SerialManager<TBMData> Serial { get; set; }
       private int _customBaudRate;
       #endregion
 
-      #endregion
-
       #region - Constructors
       public MainViewModel()
       {
-         VariableRequests = new ObservableCollection<Variable>(FileManager.ReadVariables());
-         foreach (var request in VariableRequests)
-         {
-            request.IsPending = !RegisterToSimConnect(request);
-         }
+         //VariableRequests = new ObservableCollection<Variable>(FileManager.ReadVariables());
+         //foreach (var request in VariableRequests)
+         //{
+         //   request.IsPending = !RegisterToSimConnect(request); // Add a check for "SimConnect is null".
+         //}
 
-         ConnectCmd = new BaseCommand((o) => Connect());
-         DisconnectCmd = new BaseCommand((o) => Disconnect());
-         PauseCmd = new BaseCommand((o) => Pause());
+         ConnectCmd = new Command(Connect);
+         DisconnectCmd = new Command(Disconnect);
+         PauseCmd = new Command(Pause);
+         PanelTestCmd = new Command(PanelTest);
 
-         Timer = new Timer
-         {
-            AutoReset = true,
-            Interval = _timerInterval
-         };
+         GetInputEventsCMD = new Command(GetInputEvents);
 
-         Timer.Elapsed += OnTick;
+         //Timer = new Timer
+         //{
+         //   AutoReset = true,
+         //   Interval = _timerInterval
+         //};
 
-         StartSerialCmd = new BaseCommand(o => StartSerial());
-         DebugStartSerialCmd = new BaseCommand(o => SendDebugSerial());
-         StopSerialCmd = new BaseCommand(o => StopSerial());
-         RefreshPortsCmd = new BaseCommand(o => RefreshPorts());
+         //Timer.Elapsed += OnTick;
+
+         StartSerialCmd = new Command(o => StartSerial());
+         DebugStartSerialCmd = new Command(o => SendDebugSerial());
+         StopSerialCmd = new Command(o => StopSerial());
+         RefreshPortsCmd = new Command(o => RefreshPorts());
 
          Serial = new SerialManager<TBMData>(TBMData.ConvertData, CustomBaudRate, TBMData.DataSize);
          OpenPortsList = new ObservableCollection<PortStatus>(SerialManager.GetOpenPorts());
@@ -129,14 +156,39 @@ namespace TBMAutopilotDashboard
       #endregion
 
       #region - Methods
-      public void Pause()
+      private void Pause()
       {
          IsPaused = !IsPaused;
       }
 
-      public void Resume()
+      private void Resume()
       {
-         Timer.Start();
+         IsPaused = false;
+      }
+
+      private void PanelTest(object param)
+      {
+         if (param is string str)
+         {
+            PanelStates.Buttons[str] = true;
+         }
+      }
+
+      public void PanelButtonPush(string name)
+      {
+         PanelStates.Buttons[name] = true;
+      }
+
+      public void PanelButtonRelease(string name)
+      {
+         PanelStates.Buttons[name] = false;
+      }
+
+      private void GetInputEvents()
+      {
+         if (SimConnect is null) return;
+
+         SimConnect.EnumerateInputEvents(DataRequestID.ID_0);
       }
 
       #region Background Setup
@@ -160,7 +212,7 @@ namespace TBMAutopilotDashboard
       {
          Messages.Add(new Message("Disconnecting..."));
 
-         Timer.Stop();
+         //Timer.Stop();
 
          if (SimConnect != null)
          {
@@ -184,10 +236,50 @@ namespace TBMAutopilotDashboard
             SimConnect.OnRecvQuit += new SimConnect.RecvQuitEventHandler(OnRecvQuit);
             SimConnect.OnRecvException += new SimConnect.RecvExceptionEventHandler(OnRecvException);
             SimConnect.OnRecvSimobjectDataBytype += new SimConnect.RecvSimobjectDataBytypeEventHandler(OnRecvSimobjectDataBytype);
+            SimConnect.OnRecvSimobjectData += new SimConnect.RecvSimobjectDataEventHandler(OnRecvSimobjectData);
+            SimConnect.OnRecvEnumerateInputEvents += new SimConnect.RecvEnumerateInputEventsEventHandler(OnRecvEnumerateInputEvents);
+            SimConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(OnRecvSystemState);
+            SimConnect.OnRecvEvent += new SimConnect.RecvEventEventHandler(OnRecvEvent);
+
+            SimConnect.SubscribeToSystemEvent(SimSystemEvent.SIM_START, SimSysEventName.simStart);
+            SimConnect.SubscribeToSystemEvent(SimSystemEvent.SIM_STOP, SimSysEventName.simStop);
+            SimConnect.SubscribeToSystemEvent(SimSystemEvent.EVERY_6HZ, SimSysEventName.sixHz);
          }
          catch (COMException ex)
          {
             Messages.Add(new Message(ex.Message, 1));
+         }
+      }
+
+      private void OnRecvEvent(SimConnect sender, SIMCONNECT_RECV_EVENT data)
+      {
+         if (data.uEventID == (uint)SimSystemEvent.SIM_START)
+         {
+            Resume();
+         }
+         else if (data.uEventID == (uint)SimSystemEvent.SIM_STOP)
+         {
+            Pause();
+         }
+         else if (data.uEventID == (uint)SimSystemEvent.EVERY_6HZ)
+         {
+            On6HzTick();
+         }
+      }
+
+      private void OnRecvSystemState(SimConnect sender, SIMCONNECT_RECV_SYSTEM_STATE data)
+      {
+         if (data.dwID == (uint)SimSystemEvent.SIM_START)
+         {
+            Resume();
+         }
+         else if (data.dwRequestID == (uint)SimSystemEvent.SIM_STOP)
+         {
+            Pause();
+         }
+         else if (data.dwRequestID == (uint)SimSystemEvent.EVERY_6HZ)
+         {
+            On6HzTick();
          }
       }
 
@@ -198,15 +290,12 @@ namespace TBMAutopilotDashboard
 
          Connected = true;
 
-         foreach (Variable oSimvarRequest in VariableRequests)
-         {
-            if (oSimvarRequest.IsPending)
-            {
-               oSimvarRequest.IsPending = !RegisterToSimConnect(oSimvarRequest);
-            }
-         }
+         PanelStates.RegisterSimData(SimConnect);
 
-         Timer.Start();
+         if (_getInputData)
+         {
+            GetInputEvents();
+         }
       }
 
       private void OnRecvQuit(SimConnect sender, SIMCONNECT_RECV data)
@@ -214,6 +303,19 @@ namespace TBMAutopilotDashboard
          Messages.Add(new Message("Closing Connection"));
 
          Disconnect();
+      }
+
+      private void OnRecvEnumerateInputEvents(SimConnect sender, SIMCONNECT_RECV_ENUMERATE_INPUT_EVENTS data)
+      {
+         try
+         {
+            _inputDataMap.OnRecvEnumeratedInputEvents(data);
+            _getInputData = false;
+         }
+         catch (Exception e)
+         {
+            MessageBox.Show($"Unable to read the list of input events.\n\n{e.Message}", "Error");
+         }
       }
 
       private void OnRecvException(SimConnect sender, SIMCONNECT_RECV_EXCEPTION data)
@@ -230,29 +332,60 @@ namespace TBMAutopilotDashboard
          uint iRequest = data.dwRequestID;
          uint iObject = data.dwObjectID;
 
-         var variable = VariableRequests.First((v) => (uint)v.Definition == iDefinition && (uint)v.Request == iRequest);
+         //var variable = VariableRequests.First((v) => (uint)v.Definition == iDefinition && (uint)v.Request == iRequest);
 
-         if (variable is null) return;
+         //if (variable is null) return;
 
-         variable.Value = (double)data.dwData[0];
-         variable.IsPending = false;
+         //variable.Value = (double)data.dwData[0];
+         //variable.IsPending = false;
 
-         UpdateTestButtons(iRequest, variable.Value);
+         //UpdateTestButtons(iRequest, variable.Value);
+      }
+
+      private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
+      {
+         PanelStates.Indicators.ReadSimData(data);
       }
       #endregion
 
-      private void OnTick(object sender, ElapsedEventArgs e)
+      public void OnStartup()
       {
-         foreach (Variable variableRequest in VariableRequests)
-         {
-            if (!variableRequest.IsPending)
-            {
-               SimConnect?.RequestDataOnSimObjectType(variableRequest.Request, variableRequest.Definition, 0, _simObjectType);
-               variableRequest.IsPending = true;
-            }
-         }
+         _getInputData = _inputDataMap.OnStartup();
+         //_settings = SettingsManager.OnStartup<SettingsModel>(nameof(TBMAutopilotDashboard));
+      }
 
-         Serial.SendData(TBMData.BuildData(VariableRequests));
+      /// <summary>
+      /// After all the data handling is figured out, this should probably be removed and replaced with a single call that sets the SIMCONNECT_PERIOD to ?SIM_FRAME?
+      /// <para/>
+      /// OR
+      /// <para/>
+      /// The system event "6Hz" could be used instead. It gives a decent refresh rate without drowning everything in requests.
+      /// </summary>
+      /// <param name="_">NOT USED</param>
+      /// <param name="__">NOT USED</param>
+      private void OnTick(object _, ElapsedEventArgs __)
+      {
+         // Send button states...
+         PanelStates.SendButtonStates(SimConnect);
+
+         // Send indicator data request...
+         SimConnect?.RequestDataOnSimObject(RequestID.INDICATOR, StructDefinition.INDICATOR_MESSAGE, (uint)_simObjectType, SIMCONNECT_PERIOD.ONCE, SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT, 0, 0, 0);
+
+         // Handle all the serial comms with the controller...
+         //Serial.SendData(TBMData.BuildData(VariableRequests));
+      }
+
+      private void On6HzTick()
+      {
+         if (IsPaused || !Connected) return;
+         // Send button states...
+         PanelStates.SendButtonStates(SimConnect);
+
+         // Send indicator data request...
+         SimConnect?.RequestDataOnSimObject(RequestID.INDICATOR, StructDefinition.INDICATOR_MESSAGE, (uint)_simObjectType, SIMCONNECT_PERIOD.ONCE, SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT, 0, 0, 0);
+
+         // Handle all the serial comms with the controller...
+         //Serial.SendData(TBMData.BuildData(VariableRequests));
       }
 
       private bool RegisterToSimConnect(Variable _simvarRequest)
@@ -267,7 +400,6 @@ namespace TBMAutopilotDashboard
                0.0f,
                SimConnect.SIMCONNECT_UNUSED
             );
-
             SimConnect.RegisterDataDefineStruct<double>(_simvarRequest.Definition);
 
             return true;
@@ -280,35 +412,35 @@ namespace TBMAutopilotDashboard
 
       private void SetRequestsPendingState(bool state = false)
       {
-         foreach (Variable oSimvarRequest in VariableRequests)
-         {
-            oSimvarRequest.IsPending = state;
-         }
+         //foreach (Variable oSimvarRequest in VariableRequests)
+         //{
+         //   oSimvarRequest.IsPending = state;
+         //}
       }
 
-      public void UpdateTestButtons(uint index, double value)
-      {
-         TestButtons[_testButtonIndex[index]] = value == 0 ? false : true;
+      //public void UpdateTestButtons(uint index, double value)
+      //{
+      //   TestButtons[_testButtonIndex[index]] = value != 0;
 
-         if (index > 6)
-         {
-            TestButtons["FLC"] = !TestButtons["ALT"] && !TestButtons["VS"] && TestButtons["AP"];
-         } else if (index == 5)
-         {
-            TestButtons["BANK"] = value > 3 ? true : false;
-         }
-         OnPropertyChanged(nameof(HDG));
-         OnPropertyChanged(nameof(APR));
-         OnPropertyChanged(nameof(BC));
-         OnPropertyChanged(nameof(NAV));
-         OnPropertyChanged(nameof(FD));
-         OnPropertyChanged(nameof(BANK));
-         OnPropertyChanged(nameof(AP));
-         OnPropertyChanged(nameof(YD));
-         OnPropertyChanged(nameof(ALT));
-         OnPropertyChanged(nameof(VS));
-         OnPropertyChanged(nameof(FLC));
-      }
+      //   if (index > 6)
+      //   {
+      //      TestButtons["FLC"] = !TestButtons["ALT"] && !TestButtons["VS"] && TestButtons["AP"];
+      //   } else if (index == 5)
+      //   {
+      //      TestButtons["BANK"] = value > 3;
+      //   }
+      //   OnPropertyChanged(nameof(HDG));
+      //   OnPropertyChanged(nameof(APR));
+      //   OnPropertyChanged(nameof(BC));
+      //   OnPropertyChanged(nameof(NAV));
+      //   OnPropertyChanged(nameof(FD));
+      //   OnPropertyChanged(nameof(BANK));
+      //   OnPropertyChanged(nameof(AP));
+      //   OnPropertyChanged(nameof(YD));
+      //   OnPropertyChanged(nameof(ALT));
+      //   OnPropertyChanged(nameof(VS));
+      //   OnPropertyChanged(nameof(FLC));
+      //}
 
       public void SendDebugSerial()
       {
@@ -387,6 +519,11 @@ namespace TBMAutopilotDashboard
             CustomBaudRate = (int)mi.DataContext;
          }
       }
+
+      public void AddMessage(Message msg)
+      {
+         Messages.Add(msg);
+      }
       #endregion
 
       #region - Full Properties 
@@ -396,9 +533,11 @@ namespace TBMAutopilotDashboard
          set
          {
             _connected = value;
-            IsPaused = value;
+            if (!_connected)
+            {
+               IsPaused = value;
+            }
             OnPropertyChanged();
-            OnPropertyChanged(nameof(ConnectedColor));
          }
       }
       public bool IsPaused
@@ -407,92 +546,63 @@ namespace TBMAutopilotDashboard
          set
          {
             _paused = value;
-            Timer.Enabled = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ConnectedColor));
-         }
-      }
-
-      public SolidColorBrush ConnectedColor
-      {
-         get
-         {
-            if (Connected)
-            {
-               if (!IsPaused)
-               {
-                  return new SolidColorBrush(Color.FromRgb(255, 255, 100));
-               }
-               else
-               {
-                  return new SolidColorBrush(Color.FromRgb(100, 255, 100));
-               }
-            }
-            else
-            {
-               return new SolidColorBrush(Color.FromRgb(255, 100, 100));
-            }
-         }
-      }
-
-      public Variable SelectedVariable
-      {
-         get { return _selectedVariable; }
-         set
-         {
-            _selectedVariable = value;
             OnPropertyChanged();
          }
       }
 
-      public ObservableCollection<Variable> VariableRequests
-      {
-         get { return _variableRequests; }
-         set
-         {
-            _variableRequests = value;
-            OnPropertyChanged();
-         }
-      }
+      //public Variable SelectedVariable
+      //{
+      //   get { return _selectedVariable; }
+      //   set
+      //   {
+      //      _selectedVariable = value;
+      //      OnPropertyChanged();
+      //   }
+      //}
 
-      public ObservableCollection<Message> Messages
+      //public ObservableCollection<Variable> VariableRequests
+      //{
+      //   get { return _variableRequests; }
+      //   set
+      //   {
+      //      _variableRequests = value;
+      //      OnPropertyChanged();
+      //   }
+      //}
+
+      public MessageController Messages
       {
          get { return _messages; }
          set
          {
             _messages = value;
-            if (_messages.Count > 10)
-            {
-               _messages.RemoveAt(0);
-            }
             OnPropertyChanged();
          }
       }
-
 
       private readonly SolidColorBrush _activeColor = new SolidColorBrush(Color.FromRgb(100, 255, 155));
       private readonly SolidColorBrush _inactiveColor = new SolidColorBrush(Color.FromRgb(255, 155, 100));
 
-      public Dictionary<string, bool> TestButtons
-      {
-         get { return _testButtons; }
-         set
-         {
-            _testButtons = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(HDG));
-            OnPropertyChanged(nameof(APR));
-            OnPropertyChanged(nameof(BC));
-            OnPropertyChanged(nameof(NAV));
-            OnPropertyChanged(nameof(FD));
-            OnPropertyChanged(nameof(BANK));
-            OnPropertyChanged(nameof(AP));
-            OnPropertyChanged(nameof(YD));
-            OnPropertyChanged(nameof(ALT));
-            OnPropertyChanged(nameof(VS));
-            OnPropertyChanged(nameof(FLC));
-         }
-      }
+      //public Dictionary<string, bool> TestButtons
+      //{
+      //   get { return _testButtons; }
+      //   set
+      //   {
+      //      _testButtons = value;
+      //      OnPropertyChanged();
+      //      OnPropertyChanged(nameof(HDG));
+      //      OnPropertyChanged(nameof(APR));
+      //      OnPropertyChanged(nameof(BC));
+      //      OnPropertyChanged(nameof(NAV));
+      //      OnPropertyChanged(nameof(FD));
+      //      OnPropertyChanged(nameof(BANK));
+      //      OnPropertyChanged(nameof(AP));
+      //      OnPropertyChanged(nameof(YD));
+      //      OnPropertyChanged(nameof(ALT));
+      //      OnPropertyChanged(nameof(VS));
+      //      OnPropertyChanged(nameof(FLC));
+      //   }
+      //}
 
       public PortStatus SelectedPort
       {
@@ -524,61 +634,82 @@ namespace TBMAutopilotDashboard
          }
       }
 
+      public GarminPanelModel PanelStates
+      {
+         get => _panelStates;
+         set
+         {
+            _panelStates = value;
+            OnPropertyChanged();
+         }
+      }
+
+      public SettingsModel Settings
+      {
+         get => _settings;
+         set
+         {
+            _settings = value;
+            OnPropertyChanged();
+         }
+      }
+
       #region Button Mockup
-      public SolidColorBrush HDG
-      {
-         get => TestButtons["HDG"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush HDG
+      //{
+      //   //get => TestButtons["HDG"] ? _activeColor : _inactiveColor;
+      //   get => TestButtons["HDG"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush APR
-      {
-         get => TestButtons["APR"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush APR
+      //{
+      //   get => TestButtons["APR"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush BC
-      {
-         get => TestButtons["BC"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush BC
+      //{
+      //   get => TestButtons["BC"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush NAV
-      {
-         get => TestButtons["NAV"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush NAV
+      //{
+      //   get => TestButtons["NAV"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush FD
-      {
-         get => TestButtons["FD"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush FD
+      //{
+      //   get => TestButtons["FD"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush BANK
-      {
-         get => TestButtons["BANK"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush BANK
+      //{
+      //   get => TestButtons["BANK"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush AP
-      {
-         get => TestButtons["AP"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush AP
+      //{
+      //   get => TestButtons["AP"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush YD
-      {
-         get => TestButtons["YD"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush YD
+      //{
+      //   get => TestButtons["YD"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush ALT
-      {
-         get => TestButtons["ALT"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush ALT
+      //{
+      //   get => TestButtons["ALT"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush VS
-      {
-         get => TestButtons["VS"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush VS
+      //{
+      //   get => TestButtons["VS"] ? _activeColor : _inactiveColor;
+      //}
 
-      public SolidColorBrush FLC
-      {
-         get => TestButtons["FLC"] ? _activeColor : _inactiveColor;
-      }
+      //public SolidColorBrush FLC
+      //{
+      //   get => TestButtons["FLC"] ? _activeColor : _inactiveColor;
+      //}
       #endregion
       #endregion
    }

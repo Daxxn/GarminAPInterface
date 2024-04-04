@@ -1,5 +1,5 @@
 ﻿using Microsoft.FlightSimulator.SimConnect;
-using MVVMLibraryFW;
+using MVVMLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace TBMAutopilotDashboard
       Default = 0
    };
 
-   public class Variable : BaseModel
+   public class Variable : Model
    {
       #region - Fields & Properties
       private Definition _definition;
@@ -72,7 +72,6 @@ namespace TBMAutopilotDashboard
             OnPropertyChanged();
          }
       }
-
 
       public bool IsPending
       {

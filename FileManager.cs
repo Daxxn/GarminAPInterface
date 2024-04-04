@@ -12,7 +12,7 @@ namespace TBMAutopilotDashboard
          try
          {
             var output = new List<Variable>();
-            using (StreamReader reader = new StreamReader(Properties.Settings.Default.VariablesFilePath))
+            using (StreamReader reader = new StreamReader(Path.Combine(Environment.CurrentDirectory, Properties.Settings.Default.VariablesFilePath)))
             {
                var lines = new List<string>();
                while (!reader.EndOfStream)

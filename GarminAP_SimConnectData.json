@@ -1,0 +1,105 @@
+{
+  "SimUnits": [
+    {
+      "Name": "KNOTS",
+      "Type": 2
+    },
+    {
+      "Name": "FEET",
+      "Type": 2
+    },
+    {
+      "Name": "RADIANS",
+      "Type": 8
+    },
+    {
+      "Name": "DEGREES",
+      "Type": 8
+    },
+    {
+      "Name": "METER",
+      "Type": 2
+    },
+    {
+      "Name": "MILES_PER_HOUR",
+      "Type": 2
+    },
+    {
+      "Name": "SLOT_INDEX",
+      "Type": 5,
+      "def": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "Name": "DEFAULT_PITCH_MODE",
+      "Type": 5,
+      "def": [
+        "NONE",
+        "PITCH",
+        "ALTITUDE_HOLD",
+        "VERTICAL_SPEED"
+      ]
+    },
+    {
+      "Name": "DEFAULT_BANK_MODE",
+      "Type": 5,
+      "def": [
+        "NONE",
+        "WING_LEVELER",
+        "HEADING",
+        "ROLL_HOLD"
+      ]
+    },
+    {
+      "Name": "PERCENT",
+      "Type": 4
+    },
+    {
+      "Name": "FEET_PER_MIN",
+      "Type": 1
+    },
+    {
+      "Name": "AMPERES",
+      "Type": 1
+    },
+    {
+      "Name": "VOLTS",
+      "Type": 1
+    },
+    {
+      "Name": "POUNDS_PER_SQ_INCH",
+      "Type": 4
+    },
+    {
+      "Name": "INTEGER",
+      "Type": 1
+    },
+    {
+      "Name": "INCH_OF_MERCURY",
+      "Type": 4
+    },
+    {
+      "Name": "MILLIBARS",
+      "Type": 4
+    }
+  ],
+  "SimTypes": {
+    "BOOL": 0,
+    "INT": 1,
+    "UINT": 2,
+    "BYTE": 3,
+    "FLOAT": 4,
+    "ENUM": 5,
+    "STRUCT": 6,
+    "STRING": 7
+  },
+  "Variables": {
+    "AutopilotVariables": [
+      
+    ]
+  }
+}

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using TBMAutopilotDashboard.Models.Enums;
+
 namespace TBMAutopilotDashboard
 {
    /// <summary>
@@ -34,6 +36,12 @@ namespace TBMAutopilotDashboard
       {
          Text = message;
          Type = type;
+      }
+
+      public Message(string message, Messagetype type)
+      {
+         Text = message;
+         Type = (int)type;
       }
    }
 }

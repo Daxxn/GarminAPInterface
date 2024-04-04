@@ -3,15 +3,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 
+using TBMAutopilotDashboard.Models.Enums;
+using TBMAutopilotDashboard.Models.Enums.Constants;
+using TBMAutopilotDashboard.SimUtils;
+
 namespace TBMAutopilotDashboard
 {
-   interface IBaseSimConnectWrapper
-   {
-      int GetUserSimConnectWinEvent();
-      void ReceiveSimConnectMessage();
-      void SetWindowHandle(IntPtr _hWnd);
-      void Disconnect();
-   }
    /// <summary>
    /// Interaction logic for MainWindow.xaml
    /// </summary>
@@ -58,8 +55,9 @@ namespace TBMAutopilotDashboard
                   oBaseSimConnectWrapper.ReceiveSimConnectMessage();
                }
             }
-            catch
+            catch (Exception ex)
             {
+               VM.AddMessage(new Message(ex.Message, Messagetype.ERROR));
                oBaseSimConnectWrapper.Disconnect();
             }
          }
@@ -70,10 +68,27 @@ namespace TBMAutopilotDashboard
       protected override void OnSourceInitialized(EventArgs e)
       {
          base.OnSourceInitialized(e);
+         VM.OnStartup();
          GetHWinSource().AddHook(WndProc);
          if (this.DataContext is IBaseSimConnectWrapper oBaseSimConnectWrapper)
          {
             oBaseSimConnectWrapper.SetWindowHandle(GetHWinSource().Handle);
+         }
+      }
+
+      private void HDG_BTN_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+      {
+         if (sender is Button btn)
+         {
+            VM.PanelButtonPush(PanelButtonNames.FromButton[btn.Name]);
+         }
+      }
+
+      private void HDG_BTN_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+      {
+         if (sender is Button btn)
+         {
+            VM.PanelButtonRelease(PanelButtonNames.FromButton[btn.Name]);
          }
       }
    }

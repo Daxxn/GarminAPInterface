@@ -35,9 +35,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DaxxnLoggerLibrary, Version=1.5.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\DaxxnLoggerLibrary.1.5.5\lib\net461\DaxxnLoggerLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="JsonReaderLibrary, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\JsonReaderLibrary.1.1.1\lib\net461\JsonReaderLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.FlightSimulator.SimConnect, Version=10.0.62615.0, Culture=neutral, PublicKeyToken=5f523ae7e6e1b389, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\MSFS-SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+      <HintPath>C:\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+    </Reference>
+    <Reference Include="MVVMLibrary, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\MVVMLibrary.1.1.1\lib\net461\MVVMLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SettingsLibrary, Version=2.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\SettingsLibrary.2.2.1\lib\net461\SettingsLibrary.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -61,6 +76,26 @@
     </ApplicationDefinition>
     <Compile Include="FileManager.cs" />
     <Compile Include="Message.cs" />
+    <Compile Include="Models\AttributeModels\InputEventAttribute.cs" />
+    <Compile Include="Models\AttributeModels\SimDataAttribute.cs" />
+    <Compile Include="Models\AttributeModels\SimEventAttribute.cs" />
+    <Compile Include="Models\Enums_Constants.cs" />
+    <Compile Include="Models\MessageController.cs" />
+    <Compile Include="Models\SettingsModel.cs" />
+    <Compile Include="Models\SimConnectData\IndicatorDefinition.cs" />
+    <Compile Include="Models\SimConnectData\InputDataMap.cs" />
+    <Compile Include="Models\State\GarminButtons.cs" />
+    <Compile Include="Models\State\GarminEncoders.cs" />
+    <Compile Include="Models\State\GarminIndicators.cs" />
+    <Compile Include="Models\State\GarminLighting.cs" />
+    <Compile Include="Models\State\GarminPanelModel.cs" />
+    <Compile Include="Models\SimConnectData\EnvVarModel.cs" />
+    <Compile Include="Models\SimVar.cs" />
+    <Compile Include="Models\SimVarRequestBuilder.cs" />
+    <Compile Include="Models\Utils\InvBoolColorConverter.cs" />
+    <Compile Include="Models\Utils\BoolColorConverter.cs" />
+    <Compile Include="Models\Utils\VisibilityConverter.cs" />
+    <Compile Include="SimUtils\IBaseSimConnectWrapper.cs" />
     <Compile Include="TBMData.cs" />
     <Compile Include="Variable.cs" />
     <Page Include="MainWindow.xaml">
@@ -95,30 +130,30 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Variables.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\ArduinoSerialLibrary\ArduinoSerialLibrary.csproj">
-      <Project>{F9808536-D1B7-4902-B268-BC47EDFE3A0B}</Project>
-      <Name>ArduinoSerialLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Libraries\MVVMLibraryFW\MVVMLibraryFW\MVVMLibraryFW.csproj">
-      <Project>{145d367e-bc05-4a67-8b1f-60bf12663850}</Project>
-      <Name>MVVMLibraryFW</Name>
-    </ProjectReference>
+    <AdditionalFiles Include="Variables.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Variables.txt" />
+    <ProjectReference Include="..\..\Libraries\ArduinoSerialLibrary\ArduinoSerialLibrary.csproj">
+      <Project>{f9808536-d1b7-4902-b268-bc47edfe3a0b}</Project>
+      <Name>ArduinoSerialLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "B:\Code\MSFS-SDK\SimConnect SDK\lib\SimConnect.dll" "$(TargetDir)" /y
-xcopy "B:\Code\MSFS-SDK\Samples\SimvarWatcher\SimConnect.cfg" "$(TargetDir)" /y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(MSFS_SDK)\SimConnect SDK\lib\SimConnect.dll" "$(TargetDir)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

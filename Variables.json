@@ -1,0 +1,168 @@
+{
+  "DataDefinitions": {
+    "HDG": {
+      "Name": "AUTOPILOT HEADING LOCK",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "APR": {
+      "Name": "AUTOPILOT APPROACH HOLD",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "BC": {
+      "Name": "AUTOPILOT BACKCOURSE HOLD",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "NAV": {
+      "Name": "AUTOPILOT NAV1 LOCK",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "FD": {
+      "Name": "AUTOPILOT FLIGHT DIRECTOR ACTIVE",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "BANK": {
+      "Name": "AUTOPILOT BANK HOLD",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "AP": {
+      "Name": "AUTOPILOT MASTER",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "XFR": null,
+    "YD": {
+      "Name": "AUTOPILOT YAW DAMPER",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "ALT": {
+      "Name": "AUTOPILOT ALTITUDE LOCK",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "VS": {
+      "Name": "AUTOPILOT VERTICAL HOLD",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "VNV": null,
+    "FLC": {
+      "Name": "AUTOPILOT FLIGHT LEVEL CHANGE",
+      "Type": "BOOL",
+      "Settable": true
+    },
+    "SPD": {
+      "Name": "AUTOPILOT MANAGED SPEED IN MACH",
+      "Type": "BOOL",
+      "Settable": false
+    },
+    "CRS1_ENC": null,
+    "CRS2_ENC": null,
+    "HDG_ENC": null,
+    "ALT_ENC": null
+  },
+  "InputDefinitions": {
+    "HDG": {
+      "Name": "AUTOPILOT_Heading_Mode"
+    },
+    "APR": {
+      "Name": "AUTOPILOT_Approach_Button"
+    },
+    "BC": {
+      "Name": "AUTOPILOT_Backcourse_Button"
+    },
+    "NAV": {
+      "Name": "AUTOPILOT_NAV_Mode"
+    },
+    "FD": {
+      "Name": "AUTOPILOT_FD_1_Mode"
+    },
+    "BANK": {
+      "Name": "AUTOPILOT_Bank_Button"
+    },
+    "AP": {
+      "Name": "AUTOPILOT_AP_1"
+    },
+    "XFR": {
+      "Name": "AUTOPILOT_Transfer_Mode"
+    },
+    "YD": {
+      "Name": "AUTOPILOT_YD_Button"
+    },
+    "ALT": {
+      "Name": "AUTOPILOT_Altitude_Button"
+    },
+    "VS": {
+      "Name": "AUTOPILOT_VS_Mode"
+    },
+    "VNV": {
+      "Name": "AUTOPILOT_VNAV_Mode"
+    },
+    "FLC": {
+      "Name": "AUTOPILOT_FLC_Button"
+    },
+    "SPD": {
+      "Name": "AUTOPILOT_SpeedToggle_Mode"
+    },
+    "CRS1_ENC": {
+      "Name": "AUTOPILOT_Course_1_Sync"
+    },
+    "CRS2_ENC": {
+      "Name": "AUTOPILOT_Course_2_Sync"
+    },
+    "HDG_ENC": {
+      "Name": "AUTOPILOT_Heading_Sync"
+    },
+    "ALT_ENC": null
+  },
+  "EventDefinitions": {
+    "HDG": {
+      "Name": "AP_HDG_HOLD"
+    },
+    "APR": {
+      "Name": "AP_APR_HOLD"
+    },
+    "BC": {
+      "Name": "AP_BC_HOLD"
+    },
+    "NAV": {
+      "Name": "AP_NAV1_HOLD"
+    },
+    "FD": {
+      "Name": "TOGGLE_FLIGHT_DIRECTOR"
+    },
+    "BANK": {
+      "Name": "AP_BANK_HOLD"
+    },
+    "AP": {
+      "Name": "AP_MASTER"
+    },
+    "XFR": null,
+    "YD": {
+      "Name": "YAW_DAMPER_TOGGLE"
+    },
+    "ALT": {
+      "Name": "AP_ALT_HOLD"
+    },
+    "VS": {
+      "Name": "AP_PANEL_VS_HOLD"
+    },
+    "VNV": null,
+    "FLC": {
+      "Name": "FLIGHT_LEVEL_CHANGE"
+    },
+    "SPD": {
+      "Name": "AP_MANAGED_SPEED_IN_MACH_TOGGLE"
+    },
+    "CRS1_ENC": null,
+    "CRS2_ENC": null,
+    "HDG_ENC": null,
+    "ALT_ENC": null
+  }
+}

@@ -1,0 +1,4149 @@
+{
+  "SimUnits": [
+    {
+      "Name": "KNOTS",
+      "Type": 2
+    },
+    {
+      "Name": "FEET",
+      "Type": 2
+    },
+    {
+      "Name": "RADIANS",
+      "Type": 8
+    },
+    {
+      "Name": "DEGREES",
+      "Type": 8
+    },
+    {
+      "Name": "METER",
+      "Type": 2
+    },
+    {
+      "Name": "MILES_PER_HOUR",
+      "Type": 2
+    },
+    {
+      "Name": "SLOT_INDEX",
+      "Type": 5,
+      "def": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "Name": "DEFAULT_PITCH_MODE",
+      "Type": 5,
+      "def": [
+        "NONE",
+        "PITCH",
+        "ALTITUDE_HOLD",
+        "VERTICAL_SPEED"
+      ]
+    },
+    {
+      "Name": "DEFAULT_BANK_MODE",
+      "Type": 5,
+      "def": [
+        "NONE",
+        "WING_LEVELER",
+        "HEADING",
+        "ROLL_HOLD"
+      ]
+    },
+    {
+      "Name": "PERCENT",
+      "Type": 4
+    },
+    {
+      "Name": "FEET_PER_MIN",
+      "Type": 1
+    },
+    {
+      "Name": "AMPERES",
+      "Type": 1
+    },
+    {
+      "Name": "VOLTS",
+      "Type": 1
+    },
+    {
+      "Name": "POUNDS_PER_SQ_INCH",
+      "Type": 4
+    },
+    {
+      "Name": "INTEGER",
+      "Type": 1
+    },
+    {
+      "Name": "INCH_OF_MERCURY",
+      "Type": 4
+    },
+    {
+      "Name": "MILLIBARS",
+      "Type": 4
+    }
+  ],
+  "SimTypes": {
+    "BOOL": 0,
+    "INT": 1,
+    "UINT": 2,
+    "BYTE": 3,
+    "FLOAT": 4,
+    "ENUM": 5,
+    "STRUCT": 6,
+    "STRING": 7
+  },
+  "Variables": {
+    "AutopilotVariables": [
+      {
+        "Name": "AUTOPILOT AIRSPEED HOLD",
+        "Type": "BOOL",
+        "Desc": "returns whether airspeed hold is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT AIRSPEED HOLD VAR",
+        "Type": "KNOTS",
+        "Desc": "Returns the target holding airspeed for the autopilot.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT AIRSPEED MAX CALCULATED",
+        "Type": "KNOTS",
+        "Desc": "Returns the maximum calculated airspeed (kcas) limit set for the autopilot.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT AIRSPEED MIN CALCULATED",
+        "Type": "KNOTS",
+        "Desc": "Returns the minimum calculated airspeed (kcas) limit set for the autopilot.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ALT RADIO MODE",
+        "Type": "BOOL",
+        "Desc": "If enabled the Autopilot will use the Radio Altitude rather than the Indicated Altitude.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ALTITUDE ARM",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot is in Altitude Arm mode (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ALTITUDE LOCK",
+        "Type": "BOOL",
+        "Desc": "Altitude hold active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ALTITUDE LOCK VAR",
+        "Type": "FEET",
+        "Desc": "Set or get the slot index which the altitude hold mode will track when captured. See alt_mode_slot_index for more information.",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT ALTITUDE MANUALLY TUNABLE",
+        "Type": "BOOL",
+        "Desc": "Whether or not the autopilot altitude is manually tunable or not.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ALTITUDE SLOT INDEX",
+        "Type": "SLOT_INDEX",
+        "Desc": "Index of the slot that the autopilot will use for the altitude reference. Note that there are 3 slots (1, 2, 3) that you can set/get normally, however you can also target slot index 0. Writing to slot 0 will overwrite all other slots with the slot 0 value, and by default the autopilot will follow slot 0 if you have not selected any slot index. See alt_mode_slot_index for more information.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT APPROACH ACTIVE",
+        "Type": "BOOL",
+        "Desc": "When true, the autopilot is currently flying the approach Flight Plan (the last legs).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT APPROACH ARM",
+        "Type": "BOOL",
+        "Desc": "Returns true when the autopilot is active on the approach, once it reaches the adequate condition (in most cases, once it reaches the second-last waypoint of the flightplan).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT APPROACH CAPTURED",
+        "Type": "BOOL",
+        "Desc": "Returns true when the lateral NAV mode is engaged and the angular deviation with the current tuned navigation frequency is less than 5°.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT APPROACH HOLD",
+        "Type": "BOOL",
+        "Desc": "Returns whether pproach mode is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT APPROACH IS LOCALIZER",
+        "Type": "BOOL",
+        "Desc": "Returns true if the current approach is using a localizer.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT ATTITUDE HOLD",
+        "Type": "BOOL",
+        "Desc": "Attitude hold active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT AVAILABLE",
+        "Type": "BOOL",
+        "Desc": "Available flag",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT AVIONICS MANAGED",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot has active managed avionics (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT BACKCOURSE HOLD",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot back course mode is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT BANK HOLD",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot bank hold mode is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT BANK HOLD REF",
+        "Type": "DEGREES",
+        "Desc": "The current bank-hold bank reference. Note: that if you set this, the next frame the value will be overwritten by the engine, so you may need to write to this every game frame to ensure it maintains the required value.",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT DEFAULT PITCH MODE",
+        "Type": "DEFAULT_PITCH_MODE",
+        "Desc": "The current default pitch mode of the autopilot as configured in the plane configuration with the parameter default_pitch_mode.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT DEFAULT ROLL MODE",
+        "Type": "DEFAULT_BANK_MODE",
+        "Desc": "The current default roll mode of the autopilot as configured in the plane configuration with the parameter default_bank_mode.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT DISENGAGED",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot has been disengaged (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT DIRECTOR ACTIVE",
+        "Type": "BOOL",
+        "Desc": "Flight director active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT DIRECTOR BANK",
+        "Type": "RADIANS",
+        "Desc": "Reference bank angle",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT DIRECTOR BANK EX1",
+        "Type": "RADIANS",
+        "Desc": "Raw reference bank angle",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT DIRECTOR PITCH",
+        "Type": "RADIANS",
+        "Desc": "Reference pitch angle",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT DIRECTOR PITCH EX1",
+        "Type": "RADIANS",
+        "Desc": "Raw reference pitch angle",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT FLIGHT LEVEL CHANGE",
+        "Type": "BOOL",
+        "Desc": "Toggles the autopilot Flight Level Change mode",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT GLIDESLOPE ACTIVE",
+        "Type": "BOOL",
+        "Desc": "When true, the autopilot is receiving a signal from the runway beacon and is following the slope to reach the ground.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT GLIDESLOPE ARM",
+        "Type": "BOOL",
+        "Desc": "Returns true when the autopilot is active on the glide slope.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT GLIDESLOPE HOLD",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot glidslope hold is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT HEADING LOCK",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot heading lock is enabled (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT HEADING LOCK DIR",
+        "Type": "DEGREES",
+        "Desc": "Specifies / Returns the locked in heading for the autopilot.",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT HEADING MANUALLY TUNABLE",
+        "Type": "BOOL",
+        "Desc": "Whether or not the autopilot heading is manually tunable or not.",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT HEADING SLOT INDEX",
+        "Type": "SLOT_INDEX",
+        "Desc": "Index of the slot that the autopilot will use for the heading reference. Note that there are 3 slots (1, 2, 3) that you can set/get normally, however you can also target slot index 0. Writing to slot 0 will overwrite all other slots with the slot 0 value, and by default the autopilot will follow slot 0 if you have not selected any slot index.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MACH HOLD",
+        "Type": "BOOL",
+        "Desc": "Mach hold active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MACH HOLD VAR",
+        "Type": "FLOAT",
+        "Desc": "Returns the target holding mach airspeed for the autopilot.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MANAGED SPEED IN MACH",
+        "Type": "BOOL",
+        "Desc": "Returns whether the managed speed is in mach (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MANAGED THROTTLE ACTIVE",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot managed throttle is active (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MASTER",
+        "Type": "BOOL",
+        "Desc": "On/off flag",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MAX BANK",
+        "Type": "RADIANS",
+        "Desc": "Returns the maximum banking angle for the autopilot, in radians.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT MAX BANK ID",
+        "Type": "UINT",
+        "Desc": "Returns the index of the current maximum bank setting of the autopilot.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT NAV1 LOCK",
+        "Type": "BOOL",
+        "Desc": "Returns TRUE (1) if the autopilot Nav1 lock is applied, or 0 (FALSE) otherwise.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT NAV SELECTED",
+        "Type": "UINT",
+        "Desc": "Index of Nav radio selected",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT PITCH HOLD",
+        "Type": "BOOL",
+        "Desc": "Set to True if the autopilot pitch hold has is engaged.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT PITCH HOLD REF",
+        "Type": "RADIANS",
+        "Desc": "Returns the current autotpilot reference pitch.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT RPM HOLD",
+        "Type": "BOOL",
+        "Desc": "True if autopilot rpm hold applied",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT RPM HOLD VAR",
+        "Type": "UINT",
+        "Desc": "Selected rpm",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT RPM SLOT INDEX",
+        "Type": "SLOT_INDEX",
+        "Desc": "Index of the slot that the autopilot will use for the RPM reference. Note that there are 3 slots (1, 2, 3) that you can set/get normally, however you can also target slot index 0. Writing to slot 0 will overwrite all other slots with the slot 0 value, and by default the autopilot will follow slot 0 if you have not selected any slot index.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT SPEED SLOT INDEX",
+        "Type": "SLOT_INDEX",
+        "Desc": "Index of the managed speed references",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT TAKEOFF POWER ACTIVE",
+        "Type": "BOOL",
+        "Desc": "Takeoff / Go Around power mode active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT THROTTLE ARM",
+        "Type": "BOOL",
+        "Desc": "Returns whether the autopilot auto-throttle is armed (1, TRUE) or not (0, FALSE).",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT THROTTLE MAX THRUST",
+        "Type": "PERCENT",
+        "Desc": "This can be used to set/get the thrust lever position for autopilot maximum thrust.",
+        "Settable": true
+      },
+      {
+        "Name": "AUTOPILOT VERTICAL HOLD",
+        "Type": "BOOL",
+        "Desc": "True if autopilot vertical hold applied",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT VERTICAL HOLD VAR",
+        "Type": "FEET_PER_MIN",
+        "Desc": "Selected vertical speed",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT VS SLOT INDEX",
+        "Type": "SLOT_INDEX",
+        "Desc": "Index of the slot that the autopilot will use for the VS reference. Note that there are 3 slots (1, 2, 3) that you can set/get normally, however you can also target slot index 0. Writing to slot 0 will overwrite all other slots with the slot 0 value, and by default the autopilot will follow slot 0 if you have not selected any slot index.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT WING LEVELER",
+        "Type": "BOOL",
+        "Desc": "Wing leveler active",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOPILOT YAW DAMPER",
+        "Type": "BOOL",
+        "Desc": "Yaw damper active",
+        "Settable": false
+      }
+    ],
+    "ElectricalVariables": [
+      {
+        "Name": "BUS LOOKUP INDEX",
+        "Type": "STRING",
+        "Desc": "This is a settable simvar meaning that it can both be read and set. Some of the simvars in this list are using this to lookup a value using two arguments (one argument in addition to the component index). For example to check the state of the connection between a \"circuit.45\" and the \"bus.2\" it would be written as follows: 2 (>A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:45, Bool) It should be notes that when BUS_LOOKUP_INDEX is not set (ie: it is 0) then TRUE will be returned if any of your bus connections are on.",
+        "Settable": true
+      },
+      {
+        "Name": "BUS BREAKER PULLED",
+        "Type": "BOOL",
+        "Desc": "This will be true if the bus breaker is pulled. Requires a BUS_LOOKUP_INDEX and a bus index.",
+        "Settable": true
+      },
+      {
+        "Name": "BUS CONNECTION ON",
+        "Type": "BOOL",
+        "Desc": "This will be true if the bus is connected. Requires a BUS_LOOKUP_INDEX and a bus index.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL GENALT LOAD",
+        "Type": "PERCENT",
+        "Desc": "This returns the percentage of the load output that is being consumed. This requires an alternator index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL GENALT BUS AMPS",
+        "Type": "AMPERES",
+        "Desc": "The load handled by the alternator. This requires an alternator index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL GENALT BUS VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "General alternator voltage. This requires an alternator index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL MAIN BUS VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "The main bus voltage. Use a bus index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL AVIONICS BUS AMPS",
+        "Type": "AMPERES",
+        "Desc": "Avionics bus current",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL AVIONICS BUS VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "Avionics bus voltage",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL MAIN BUS AMPS",
+        "Type": "AMPERES",
+        "Desc": "Main bus current",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL TOTAL LOAD AMPS",
+        "Type": "AMPERES",
+        "Desc": "Total load amps",
+        "Settable": false
+      },
+      {
+        "Name": "NEW ELECTRICAL SYSTEM",
+        "Type": "BOOL",
+        "Desc": "Is the aircraft using the new Electrical System or the legacy FSX one.",
+        "Settable": false
+      },
+      {
+        "Name": "ALTERNATOR BREAKER PULLED",
+        "Type": "BOOL",
+        "Desc": "This will be true if the alternator breaker is pulled. Requires a BUS_LOOKUP_INDEX and an alternator index.",
+        "Settable": true
+      },
+      {
+        "Name": "ALTERNATOR CONNECTION ON",
+        "Type": "BOOL",
+        "Desc": "This will be true if the alternator is connected. Requires a BUS_LOOKUP_INDEX and an alternator index.",
+        "Settable": false
+      },
+      {
+        "Name": "GENERAL ENG MASTER ALTERNATOR:index",
+        "Type": "BOOL",
+        "Desc": "The alternator (generator) switch position, true if the switch is ON. Requires an engine index, and the use of an alternator index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "APU BLEED PRESSURE RECEIVED BY ENGINE",
+        "Type": "POUNDS_PER_SQ_INCH",
+        "Desc": "Bleed air pressure received by the engine from the APU.",
+        "Settable": false
+      },
+      {
+        "Name": "APU GENERATOR ACTIVE:index",
+        "Type": "BOOL",
+        "Desc": "Set or get whether an APU is active (true) or not (false). Takes an index to be able to have multiple generators on a single APU.",
+        "Settable": true
+      },
+      {
+        "Name": "APU GENERATOR SWITCH:index",
+        "Type": "BOOL",
+        "Desc": "Enables or disables the APU for an engine. Takes an index to be able to have multiple generators on a single APU",
+        "Settable": false
+      },
+      {
+        "Name": "APU ON FIRE DETECTED",
+        "Type": "BOOL",
+        "Desc": "Will return true if the APU is on fire, or false otherwise.",
+        "Settable": false
+      },
+      {
+        "Name": "APU PCT RPM",
+        "Type": "PERCENT",
+        "Desc": "Auxiliary power unit RPM, as a percentage",
+        "Settable": false
+      },
+      {
+        "Name": "APU PCT STARTER",
+        "Type": "PERCENT",
+        "Desc": "Auxiliary power unit starter, as a percentage",
+        "Settable": false
+      },
+      {
+        "Name": "APU SWITCH",
+        "Type": "BOOL",
+        "Desc": "Whether or not the APU is switched on.",
+        "Settable": true
+      },
+      {
+        "Name": "APU VOLTS:index",
+        "Type": "VOLTS",
+        "Desc": "The volts from the APU to the selected engine. Takes an index to be able to have multiple generators on a single APU.",
+        "Settable": false
+      },
+      {
+        "Name": "BLEED AIR APU",
+        "Type": "BOOL",
+        "Desc": "Returns whether or not the APU attempts to provide Bleed Air.",
+        "Settable": false
+      },
+      {
+        "Name": "BATTERY BREAKER PULLED",
+        "Type": "BOOL",
+        "Desc": "This will be true if the battery breaker is pulled. Requires a BUS LOOKUP INDEX and a battery index.",
+        "Settable": true
+      },
+      {
+        "Name": "BATTERY CONNECTION ON",
+        "Type": "BOOL",
+        "Desc": "This will be true if the battery is connected. Requires a BUS_LOOKUP_INDEX and a battery index.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL BATTERY BUS AMPS",
+        "Type": "AMPERES",
+        "Desc": "Battery bus current",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL BATTERY BUS VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "Battery bus voltage",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL BATTERY ESTIMATED CAPACITY PCT",
+        "Type": "PERCENT",
+        "Desc": "Battery capacity over max capacity, 100 is full.",
+        "Settable": false
+      },
+      {
+        "Name": "ELECTRICAL BATTERY LOAD",
+        "Type": "AMPERES",
+        "Desc": "The load handled by the battery (negative values mean the battery is receiving current). Use a battery index when referencing.",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL BATTERY VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "The battery voltage. Use a battery index when referencing.",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL HOT BATTERY BUS AMPS",
+        "Type": "AMPERES",
+        "Desc": "Current available when battery switch is turned off",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL HOT BATTERY BUS VOLTAGE",
+        "Type": "VOLTS",
+        "Desc": "Voltage available when battery switch is turned off",
+        "Settable": true
+      },
+      {
+        "Name": "ELECTRICAL MASTER BATTERY",
+        "Type": "BOOL",
+        "Desc": "The battery switch position, true if the switch is ON. Use a battery index when referencing.",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER ADF",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER ALTFLD",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER AUTOPILOT",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER AVNBUS1",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER AVNBUS2",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER AVNFAN",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER FLAP",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER GPS",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER INST",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER INSTLTS",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER NAVCOM1",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER NAVCOM2",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER NAVCOM3",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER TURNCOORD",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER WARN",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "BREAKER XPNDR",
+        "Type": "BOOL",
+        "Desc": "Get or set the breaker state for the electrical system (either true or false).",
+        "Settable": true
+      },
+      {
+        "Name": "CIRCUIT AUTOPILOT ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to this circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT AUTO BRAKES ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to this circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT AUTO FEATHER ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to this circuit. Please see the Note On Autofeathering for more information.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT AVIONICS ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to this circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT BREAKER PULLED",
+        "Type": "BOOL",
+        "Desc": "This will be true if the circuit breaker is pulled. Requires a BUS_LOOKUP_INDEX and a circuit index.",
+        "Settable": true
+      },
+      {
+        "Name": "CIRCUIT CONNECTION ON",
+        "Type": "BOOL",
+        "Desc": "This will be true if the circuit is connected. Requires a BUS_LOOKUP_INDEX and a circuit index.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT FLAP MOTOR ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the flap motor circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT GEAR MOTOR ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the gear motor circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT GEAR WARNING ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to gear warning circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT GENERAL PANEL ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the general panel circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT HYDRAULIC PUMP ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the hydraulic pump circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT MARKER BEACON ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the marker beacon circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT NAVCOM1 ON",
+        "Type": "BOOL",
+        "Desc": "Whether or not power is available to the NAVCOM1 circuit.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT NAVCOM2 ON",
+        "Type": "BOOL",
+        "Desc": "Whether or not power is available to the NAVCOM2 circuit.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT NAVCOM3 ON",
+        "Type": "BOOL",
+        "Desc": "Whether or not power is available to the NAVCOM3 circuit.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT ON",
+        "Type": "BOOL",
+        "Desc": "This will be true if the given circuit is functioning. Use a circuit index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT PITOT HEAT ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the pitot heat circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT POWER SETTING",
+        "Type": "BOOL",
+        "Desc": "This returns the percentage of use that the circuit is getting. This requires a circuit index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT PROP SYNC ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the propeller sync circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT STANDBY VACUUM ON",
+        "Type": "BOOL",
+        "Desc": "Is electrical power available to the vacuum circuit",
+        "Settable": false
+      },
+      {
+        "Name": "CIRCUIT SWITCH ON",
+        "Type": "BOOL",
+        "Desc": "The circuit switch position, true if the switch is ON. Use a circuit index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "EXTERNAL POWER AVAILABLE",
+        "Type": "BOOL",
+        "Desc": "This will be true if the given external power source is available. Use an external power index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "EXTERNAL POWER BREAKER PULLED",
+        "Type": "BOOL",
+        "Desc": "The state of the breaker of an external power source",
+        "Settable": true
+      },
+      {
+        "Name": "EXTERNAL POWER CONNECTION ON",
+        "Type": "BOOL",
+        "Desc": "The state of the connection between a bus and an external power source",
+        "Settable": false
+      },
+      {
+        "Name": "EXTERNAL POWER ON",
+        "Type": "BOOL",
+        "Desc": "The external power switch position, true if the switch is ON. Use an external power index when referencing.",
+        "Settable": false
+      }
+    ],
+    "GeneralVariables": [
+      {
+        "Name": "AIRSPEED TRUE CALIBRATE",
+        "Type": "DEGREES",
+        "Desc": "Angle of True calibration scale on airspeed indicator.",
+        "Settable": true
+      },
+      {
+        "Name": "ALTERNATE STATIC SOURCE OPEN:index",
+        "Type": "BOOL",
+        "Desc": "Alternate static air source.",
+        "Settable": false
+      },
+      {
+        "Name": "ANEMOMETER PCT RPM",
+        "Type": "PERCENT",
+        "Desc": "Anemometer rpm as a percentage.",
+        "Settable": false
+      },
+      {
+        "Name": "ANGLE OF ATTACK INDICATOR",
+        "Type": "RADIANS",
+        "Desc": "AoA indication.",
+        "Settable": false
+      },
+      {
+        "Name": "AUDIO PANEL AVAILABLE",
+        "Type": "BOOL",
+        "Desc": "True if the audio panel is available.",
+        "Settable": false
+      },
+      {
+        "Name": "AUDIO PANEL VOLUME",
+        "Type": "PERCENT",
+        "Desc": "The Volume of the Audio Panel.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTOTHROTTLE ACTIVE",
+        "Type": "BOOL",
+        "Desc": "Auto-throttle active.",
+        "Settable": false
+      },
+      {
+        "Name": "AUTO COORDINATION",
+        "Type": "BOOL",
+        "Desc": "Is auto-coordination active.",
+        "Settable": true
+      },
+      {
+        "Name": "AVIONICS MASTER SWITCH:index",
+        "Type": "BOOL",
+        "Desc": "The avionics master switch position, true if the switch is ON. Use an avionics circuit index when referencing.",
+        "Settable": false
+      },
+      {
+        "Name": "EXTERNAL SYSTEM VALUE",
+        "Type": "INTEGER",
+        "Desc": "Generic SimVar.",
+        "Settable": true
+      },
+      {
+        "Name": "GLASSCOCKPIT AUTOMATIC BRIGHTNESS",
+        "Type": "INTEGER",
+        "Desc": "This variable will return a value between 0 and 1 for the automatic brightness setting for glass cockpit displays, where 0 is the dimmest and 1 is the brightest. This value will vary depending on the time of day.",
+        "Settable": false
+      },
+      {
+        "Name": "KOHLSMAN SETTING HG:index",
+        "Type": "INTEGER",
+        "Desc": "The value for the given altimeter index in inches of mercury.",
+        "Settable": false
+      },
+      {
+        "Name": "KOHLSMAN SETTING MB:index",
+        "Type": "INTEGER",
+        "Desc": "The value for the given altimeter index in millibars.",
+        "Settable": false
+      },
+      {
+        "Name": "KOHLSMAN SETTING STD:index",
+        "Type": "BOOL",
+        "Desc": "True if the indexed altimeter is in \"Standard\" mode, or false otherwise.",
+        "Settable": false
+      }
+    ],
+    "LightingVariables": [
+      {
+        "Name": "IS ANY INTERIOR LIGHT ON",
+        "Type": "BOOL",
+        "Desc": "Will return true if any interior light is on or false otherwise.",
+        "Settable": false
+      },
+      {
+        "Name": "LANDING LIGHT PBH",
+        "Type": "XYZ",
+        "Desc": "Landing light pitch bank and heading.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT BEACON",
+        "Type": "BOOL",
+        "Desc": "Light switch state.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT BEACON ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target beacon light is functioning or if the switch is ON. Use beacon lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT BACKLIGHT INTENSITY",
+        "Type": "PERCENT",
+        "Desc": "Vehicle backlights current intensity (0 = off, 1 = full intensity).",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT BRAKE ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target brake light is functioning or if the switch is ON.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT CABIN",
+        "Type": "BOOL",
+        "Desc": "Light switch state.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT CABIN ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target cabin light is functioning or if the switch is ON. Use the cabin lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT CABIN POWER SETTING",
+        "Type": "BOOL",
+        "Desc": "The current cabin light power setting. Requires the cabin lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT GLARESHIELD",
+        "Type": "BOOL",
+        "Desc": "Whether or not the Light switch for the Glareshield is enabled.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT GLARESHIELD ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target glareshield light is functioning or if the switch is ON. Use the glareshield lightdef index.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT GLARESHIELD POWER SETTING",
+        "Type": "BOOL",
+        "Desc": "The current glareshield light power setting. Requires the glareshield lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT GYROLIGHT INTENSITY",
+        "Type": "PERCENT",
+        "Desc": "Vehicle gyrolights current intensity (0 = off, 1 = full intensity).",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT HEAD ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target navigation light is functioning or if the switch is ON.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT HEADLIGHT INTENSITY",
+        "Type": "PERCENT",
+        "Desc": "Vehicle headlights current intensity (0 = off, 1 = full intensity).",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT LANDING ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target landing light is functioning or if the switch is ON. Use landing lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT LANDING",
+        "Type": "BOOL",
+        "Desc": "Light switch state for landing light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT LOGO",
+        "Type": "BOOL",
+        "Desc": "Light switch state for logo light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT LOGO ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target logo light is functioning or if the switch is ON. Use the logo lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT NAV ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target navigation light is functioning or if the switch is ON. Use navigation lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT NAV",
+        "Type": "BOOL",
+        "Desc": "Light switch state for the NAV light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT ON STATES",
+        "Type": "bit_mask",
+        "Desc": "",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT PANEL",
+        "Type": "BOOL",
+        "Desc": "Light switch state of the panel light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT PANEL ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target panel light is functioning or if the switch is ON. Use the panel lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT PANEL POWER SETTING",
+        "Type": "BOOL",
+        "Desc": "The current panel light power setting. Requires the panel lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT PEDESTRAL",
+        "Type": "BOOL",
+        "Desc": "Whether or not the Light switch for the Pedestal is enabled.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT PEDESTRAL ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target pedestral light is functioning or if the switch is ON. Requires the pedestral lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT PEDESTRAL POWER SETTING",
+        "Type": "PERCENT",
+        "Desc": "The current pedestral light power setting. Requires the pedestral lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT POTENTIOMETER:index",
+        "Type": "PERCENT",
+        "Desc": "Adjust the potentiometer of the indexed lighting. Index is defined in the appropriate lightdef hashmap setting.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT RECOGNITION",
+        "Type": "BOOL",
+        "Desc": "Light switch state for the recognition light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT RECOGNITION ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target recognition light is functioning or if the switch is ON. Use the recognition lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT STROBE",
+        "Type": "BOOL",
+        "Desc": "Light switch state for the strobe lights.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT STROBE ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target strobe light is functioning or if the switch is ON. Use the strobe lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT TAXI",
+        "Type": "BOOL",
+        "Desc": "Light switch state for the taxi light.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT TAXI ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target taxi light is functioning or if the switch is ON. Use taxi lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "LIGHT WING",
+        "Type": "BOOL",
+        "Desc": "Light switch state for the wing lights.",
+        "Settable": true
+      },
+      {
+        "Name": "LIGHT WING ON",
+        "Type": "BOOL",
+        "Desc": "Returns true if the target wing light is functioning or if the switch is ON. Use the wing lightdef index.",
+        "Settable": false
+      },
+      {
+        "Name": "MANUAL INSTRUMENT LIGHTS",
+        "Type": "BOOL",
+        "Desc": "True if instrument lights are set manually.",
+        "Settable": false
+      },
+      {
+        "Name": "STROBES AVAILABLE",
+        "Type": "BOOL",
+        "Desc": "True if strobe lights are available.",
+        "Settable": false
+      }
+    ],
+    "PartialPanelVariables": [
+      {
+        "Name": "PARTIAL PANEL ADF",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL AIRSPEED",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL ALTIMETER",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL ATTITUDE",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL AVIONICS",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL COMM",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL COMPASS",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL ELECTRICAL",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL ENGINE",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL FUEL INDICATOR",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL HEADING",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL NAV",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL PITOT",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL TRANSPONDER",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL TURN COORDINATOR",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL VACUUM",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      },
+      {
+        "Name": "PARTIAL PANEL VERTICAL VELOCITY",
+        "Type": "fail_flag",
+        "Desc": "Gauge fail flag.",
+        "Settable": true
+      }
+    ],
+    "MiscVariables": [
+      {
+        "Name": "CATEGORY",
+        "Type": "STRING",
+        "Desc": "One of the following: \"Airplane\", \"Helicopter\", \"Boat\", \"GroundVehicle\", \"ControlTower\", \"SimpleObject\", \"Viewer\"",
+        "Settable": false
+      },
+      {
+        "Name": "CRASH FLAG",
+        "Type": "crash_flag",
+        "Desc": "Flag value that indicates the cause of a crash.",
+        "Settable": false
+      },
+      {
+        "Name": "CRASH SEQUENCE",
+        "Type": "crash_seq",
+        "Desc": "The state of the crash event sequence.",
+        "Settable": false
+      },
+      {
+        "Name": "USER INPUT ENABLED",
+        "Type": "BOOL",
+        "Desc": "Is input allowed from the user.",
+        "Settable": true
+      }
+    ]
+  },
+  "EnvironmentVariables": [
+    {
+      "Name": "ABSOLUTE TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns the seconds since 12:00 am 1/1/1AD Zulu Time See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns the seconds since midnight (00:00 Zulu Time) on the current day."
+    },
+    {
+      "Name": "ZULU DAY OF WEEK",
+      "Type": "NUMBER",
+      "Desc": "This returns the current Zulu Time day of the week as an integer value between 0 and 6 (inclusive), where 0 is Sunday and 6 is Saturday. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU DAY OF MONTH",
+      "Type": "NUMBER",
+      "Desc": "This returns the current Zulu Time day of the month as an integer value between 1 and 31 (inclusive). See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU MONTH OF YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current Zulu Time month of the year as an integer value between 1 and 12 (inclusive), where 1 is January and 12 is December. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU DAY OF YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current Zulu Time day of the year as an integer value between 0 and 365 (365 only on a leap year). See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current Zulu Time year as an integer value. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU SUNRISE TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns the seconds since midnight until the sunrise based on Zulu Time. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "ZULU SUNSET TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns the seconds since midnight until the sunset based on Zulu Time. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "LOCAL TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns the seconds since midnight (00:00 local time) on the current day."
+    },
+    {
+      "Name": "LOCAL DAY OF WEEK",
+      "Type": "NUMBER",
+      "Desc": "This returns the current day of the week as an integer value between 0 and 6 (inclusive), where 0 is Monday and 6 is Sunday, within the local time reference."
+    },
+    {
+      "Name": "LOCAL DAY OF MONTH",
+      "Type": "NUMBER",
+      "Desc": "This returns the current day of the month as an integer value between 1 and 31 (inclusive), within the local time reference."
+    },
+    {
+      "Name": "LOCAL MONTH OF YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current month of the year as an integer value between 1 and 12 (inclusive), where 1 is January and 12 is December, within the local time reference."
+    },
+    {
+      "Name": "LOCAL DAY OF YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current day of the year as an integer value between 0 and 365 (365 only on a leap year), within the local time reference."
+    },
+    {
+      "Name": "LOCAL YEAR",
+      "Type": "NUMBER",
+      "Desc": "This returns the current year (local time) as an integer value."
+    },
+    {
+      "Name": "TIME ZONE OFFSET",
+      "Type": "SECONDS",
+      "Desc": "This returns the offset between the local time and Zulu Time. See the Note On Zulu Time for more information."
+    },
+    {
+      "Name": "TIME OF DAY",
+      "Type": "ENUM",
+      "Desc": "This will return an integer value representing the approximate time of day where: 0 = dawn 1 = day 2 = dusk 3 = night"
+    },
+    {
+      "Name": "TOOLTIP UNITS",
+      "Type": "ENUM",
+      "Desc": "This will return an integer value representing the current units used to display tooltip information, where: 0 = default 1 = metric (SI) 2 = US (imperial)"
+    },
+    {
+      "Name": "UNITS OF MEASURE",
+      "Type": "ENUM",
+      "Desc": "This indicates the units used to express measurements and will return an integer value representing the following: 0 - English 1 - Metric with altitude in feet 2 - Metric with altitude in meters"
+    },
+    {
+      "Name": "SIMULATION RATE",
+      "Type": "NUMBER",
+      "Desc": "This is used to get/set the internal rate of passing time within the simulation(independently of the visual frame rate). The value will be clamped between 0.0625 and 128, and a value of 1 means that 1 second of game time is the same as 1 second of \"real\" time, and lower values will make the game time slower, and higher values will make the game time faster. Values are always multiples of two starting at 0.0625, so you can have: 0.0625, 0.125, 0.25, 0.5, 1, 2, 4, ... 128"
+    },
+    {
+      "Name": "SIMULATION TIME",
+      "Type": "SECONDS",
+      "Desc": "This returns a value for the seconds since the simulation has been started."
+    },
+    {
+      "Name": "SIMULATION DELTA TIME",
+      "Type": "NUMBER",
+      "Desc": "This returns a value for the time passed between the last simulation frame and the current one."
+    },
+    {
+      "Name": "IS IN VR",
+      "Type": "BOOL",
+      "Desc": "This returns either 1 (TRUE) ir 0 (FALSE) to indicate whether the simulation is in VR mode or not."
+    }
+  ],
+  "Events": {
+    "AutopilotEvents": [
+      {
+        "Name": "AP_AIRSPEED_HOLD",
+        "Params": [],
+        "Desc": "Toggles airspeed hold mode"
+      },
+      {
+        "Name": "AP_AIRSPEED_OFF",
+        "Params": [],
+        "Desc": "Turns airspeed hold off"
+      },
+      {
+        "Name": "AP_AIRSPEED_ON",
+        "Params": [],
+        "Desc": "Turns airspeed hold on"
+      },
+      {
+        "Name": "AP_AIRSPEED_SET",
+        "Params": [
+          {
+            "Name": "Enable",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets airspeed hold on/off"
+      },
+      {
+        "Name": "AP_ALT_VAR_DEC",
+        "Params": [
+          {
+            "Name": "NewRefAltitude",
+            "Type": "UINT"
+          },
+          {
+            "Name": "Index",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Decrements the reference altitude."
+      },
+      {
+        "Name": "AP_ALT_VAR_INC",
+        "Params": [
+          {
+            "Name": "NewRefAltitude",
+            "Type": "UINT"
+          },
+          {
+            "Name": "Index",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Increments the reference altitude."
+      },
+      {
+        "Name": "AP_ALT_HOLD",
+        "Params": [],
+        "Desc": "Toggles altitude hold mode"
+      },
+      {
+        "Name": "AP_ALT_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off altitude hold mode"
+      },
+      {
+        "Name": "AP_ALT_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns altitude hold mode on"
+      },
+      {
+        "Name": "AP_ALT_RADIO_MODE_OFF",
+        "Params": [],
+        "Desc": "Deactivate autopilot radio altitude mode."
+      },
+      {
+        "Name": "AP_ALT_RADIO_MODE_ON",
+        "Params": [],
+        "Desc": "Activate autopilot radio altitude mode."
+      },
+      {
+        "Name": "AP_ALT_RADIO_MODE_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set autopilot radio altitude mode."
+      },
+      {
+        "Name": "AP_ALT_RADIO_MODE_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle autopilot radio altitude mode."
+      },
+      {
+        "Name": "AP_ALT_VAR_SET_ENGLISH",
+        "Params": [
+          {
+            "Name": "NewRefAltitude",
+            "Type": "UINT"
+          },
+          {
+            "Name": "Index",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets altitude reference in feet"
+      },
+      {
+        "Name": "AP_ALT_VAR_SET_METRIC",
+        "Params": [
+          {
+            "Name": "NewRefAltitude",
+            "Type": "UINT"
+          },
+          {
+            "Name": "Index",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets reference altitude in meters"
+      },
+      {
+        "Name": "AP_APR_HOLD",
+        "Params": [],
+        "Desc": "Toggles approach hold (localizer and glide-slope)"
+      },
+      {
+        "Name": "AP_APR_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off approach hold mode"
+      },
+      {
+        "Name": "AP_APR_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns both AP localizer and glide-slope modes on/armed"
+      },
+      {
+        "Name": "AP_ATT_HOLD",
+        "Params": [],
+        "Desc": "Toggle attitude hold mode"
+      },
+      {
+        "Name": "AP_ATT_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off attitude hold mode"
+      },
+      {
+        "Name": "AP_ATT_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns on AP wing leveler and pitch hold mode"
+      },
+      {
+        "Name": "AP_AVIONICS_MANAGED_OFF",
+        "Params": [],
+        "Desc": "Turn off the Managed Avionics mode. This is linked to the SimVar AUTOPILOT AVIONICS MANAGED."
+      },
+      {
+        "Name": "AP_AVIONICS_MANAGED_ON",
+        "Params": [],
+        "Desc": "Turn on the Managed Avionics mode. This is linked to the SimVar AUTOPILOT AVIONICS MANAGED."
+      },
+      {
+        "Name": "AP_AVIONICS_MANAGED_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set the autopilot managed avionics mode (TRUE for on, FALSE for off)."
+      },
+      {
+        "Name": "AP_AVIONICS_MANAGED_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle on/off the avionics managed mode on the autopilot."
+      },
+      {
+        "Name": "AP_BANK_HOLD",
+        "Params": [],
+        "Desc": "Toggles the autopilot bank hold mode on / off."
+      },
+      {
+        "Name": "AP_BANK_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off the autopilot bank hold mode."
+      },
+      {
+        "Name": "AP_BANK_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns on the autopilot bank hold mode."
+      },
+      {
+        "Name": "AP_BC_HOLD",
+        "Params": [],
+        "Desc": "Toggles the backcourse mode for the localizer hold"
+      },
+      {
+        "Name": "AP_BC_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off backcourse mode for localizer hold"
+      },
+      {
+        "Name": "AP_BC_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns localizer back course hold mode on/armed"
+      },
+      {
+        "Name": "AP_HDG_HOLD",
+        "Params": [],
+        "Desc": "Toggles heading hold mode"
+      },
+      {
+        "Name": "AP_HDG_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off heading hold mode"
+      },
+      {
+        "Name": "AP_HDG_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns heading hold mode on"
+      },
+      {
+        "Name": "AP_LOC_HOLD",
+        "Params": [],
+        "Desc": "Toggles localizer (only) hold mode"
+      },
+      {
+        "Name": "AP_LOC_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off localizer hold mode"
+      },
+      {
+        "Name": "AP_LOC_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns AP localizer hold on/armed and glide-slope hold mode off"
+      },
+      {
+        "Name": "AP_MACH_VAR_DEC",
+        "Params": [
+          {
+            "Name": "EngineIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Decrements the reference mach by the amount set in the systems.cfg using the mach_increment parameter. Select engine 1 - 4."
+      },
+      {
+        "Name": "AP_MACH_VAR_INC",
+        "Params": [
+          {
+            "Name": "EngineIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Increments the reference mach by the amount set in the systems.cfg using the mach_increment parameter. Select engine 1 - 4."
+      },
+      {
+        "Name": "AP_MACH_HOLD",
+        "Params": [],
+        "Desc": "Toggles mach hold"
+      },
+      {
+        "Name": "AP_MACH_OFF",
+        "Params": [],
+        "Desc": "Turns mach hold off"
+      },
+      {
+        "Name": "AP_MACH_ON",
+        "Params": [],
+        "Desc": "Turns mach hold on"
+      },
+      {
+        "Name": "AP_MACH_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets mach hold on/off."
+      },
+      {
+        "Name": "AP_MACH_VAR_SET",
+        "Params": [
+          {
+            "Name": "machValue",
+            "Type": "UINT"
+          },
+          {
+            "Name": "EngineIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the mach reference. Select engine 1 - 4."
+      },
+      {
+        "Name": "AP_MACH_VAR_SET_EX1",
+        "Params": [
+          {
+            "Name": "machValue",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "EngineIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the mach reference using a precise value. Select engine 1 - 4."
+      },
+      {
+        "Name": "AP_MANAGED_SPEED_IN_MACH_OFF",
+        "Params": [],
+        "Desc": "Turns off the use of the mach value to compute airspeed used by AP."
+      },
+      {
+        "Name": "AP_MANAGED_SPEED_IN_MACH_ON",
+        "Params": [],
+        "Desc": "Turns on the use of the mach value to compute airspeed used by AP."
+      },
+      {
+        "Name": "AP_MANAGED_SPEED_IN_MACH_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets the use of the mach value to compute airspeed used by AP."
+      },
+      {
+        "Name": "AP_MANAGED_SPEED_IN_MACH_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle the use of the mach value to compute airspeed used by AP."
+      },
+      {
+        "Name": "AP_MASTER",
+        "Params": [],
+        "Desc": "Toggles AP on/off"
+      },
+      {
+        "Name": "AP_MAX_BANK_ANGLE_SET",
+        "Params": [
+          {
+            "Name": "Angle",
+            "Type": "DEGREE"
+          }
+        ],
+        "Desc": "Set the bank angle for the aircraft and override the predefined max bank angle of the aircraft."
+      },
+      {
+        "Name": "AP_MAX_BANK_INC",
+        "Params": [],
+        "Desc": "Increment the AP max bank angle index. Note: that if there is only one index possible then using this event will do nothing."
+      },
+      {
+        "Name": "AP_MAX_BANK_DEC",
+        "Params": [],
+        "Desc": "Decrement the AP max bank angle index. Note: that if there is only one index possible then using this event will do nothing."
+      },
+      {
+        "Name": "AP_MAX_BANK_SET",
+        "Params": [
+          {
+            "Name": "AngleIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the autopilot max bank angle index value, where the value is clamped between 0 and the number of available indices. The indices correspond to the number of values set for the max_bank table, plus index 0 which corresponds to the auto banking system. When auto_max_bank is enabled, setting the index to 0 will turn on the AP auto banking. 0: use auto banking 1: use the first value in the max_bank table 2: use the second value in the max_bank table."
+      },
+      {
+        "Name": "AP_MAX_BANK_VELOCITY_SET",
+        "Params": [
+          {
+            "Name": "Velocity",
+            "Type": "FLOAT"
+          }
+        ],
+        "Desc": "Set the bank velocity of the aircraft and overrides the predifined maximum bank velocity of the aircraft."
+      },
+      {
+        "Name": "AP_N1_HOLD",
+        "Params": [],
+        "Desc": "Autopilot, hold the N1 percentage at its current level."
+      },
+      {
+        "Name": "AP_N1_REF_DEC",
+        "Params": [],
+        "Desc": "Decrement the autopilot N1 reference."
+      },
+      {
+        "Name": "AP_N1_REF_INC",
+        "Params": [],
+        "Desc": "Increment the autopilot N1 reference."
+      },
+      {
+        "Name": "AP_N1_REF_SET",
+        "Params": [
+          {
+            "Name": "N1RefValue",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "EngineIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the autopilot N1 reference."
+      },
+      {
+        "Name": "AP_NAV_SELECT_SET",
+        "Params": [
+          {
+            "Name": "SelectedNavIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the NAV (1 or 2) which is used by the Nav hold modes"
+      },
+      {
+        "Name": "AP_NAV1_HOLD",
+        "Params": [],
+        "Desc": "Toggles the nav hold mode"
+      },
+      {
+        "Name": "AP_NAV1_HOLD_OFF",
+        "Params": [],
+        "Desc": "Turns off nav hold mode"
+      },
+      {
+        "Name": "AP_NAV1_HOLD_ON",
+        "Params": [],
+        "Desc": "Turns lateral hold mode on"
+      },
+      {
+        "Name": "AP_PANEL_ALTITUDE_HOLD",
+        "Params": [],
+        "Desc": "Toggles altitude hold mode on/off"
+      },
+      {
+        "Name": "AP_PANEL_ALTITUDE_OFF",
+        "Params": [],
+        "Desc": "Turns altitude hold mode off"
+      },
+      {
+        "Name": "AP_PANEL_ALTITUDE_ON",
+        "Params": [],
+        "Desc": "Turns altitude hold mode on (without capturing current altitude)"
+      },
+      {
+        "Name": "AP_PANEL_ALTITUDE_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets altitude hold mode on/off"
+      },
+      {
+        "Name": "AP_PANEL_HEADING_HOLD",
+        "Params": [],
+        "Desc": "Toggles heading hold mode on/off"
+      },
+      {
+        "Name": "AP_PANEL_HEADING_OFF",
+        "Params": [],
+        "Desc": "Turns heading mode off"
+      },
+      {
+        "Name": "AP_PANEL_HEADING_ON",
+        "Params": [],
+        "Desc": "Turns heading mode on (without capturing current heading)"
+      },
+      {
+        "Name": "AP_PANEL_HEADING_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set heading mode on/off"
+      },
+      {
+        "Name": "AP_PANEL_MACH_HOLD",
+        "Params": [],
+        "Desc": "Toggles mach hold"
+      },
+      {
+        "Name": "AP_PANEL_MACH_OFF",
+        "Params": [],
+        "Desc": "Turns off mach hold"
+      },
+      {
+        "Name": "AP_PANEL_MACH_ON",
+        "Params": [],
+        "Desc": "Turns on mach hold"
+      },
+      {
+        "Name": "AP_PANEL_MACH_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets mach hold on/off"
+      },
+      {
+        "Name": "AP_PANEL_SPEED_HOLD",
+        "Params": [],
+        "Desc": "Toggles airspeed hold mode"
+      },
+      {
+        "Name": "AP_PANEL_SPEED_OFF",
+        "Params": [],
+        "Desc": "Turns off speed hold mode"
+      },
+      {
+        "Name": "AP_PANEL_SPEED_ON",
+        "Params": [],
+        "Desc": "Turns on speed hold mode"
+      },
+      {
+        "Name": "AP_PANEL_SPEED_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set speed hold mode on/off"
+      },
+      {
+        "Name": "AP_PANEL_VS_OFF",
+        "Params": [],
+        "Desc": "Turn off the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_PANEL_VS_ON",
+        "Params": [],
+        "Desc": "Turn on the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_PANEL_VS_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Enables or diables the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_PANEL_VS_HOLD",
+        "Params": [],
+        "Desc": "Toggles the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_PITCH_LEVELER",
+        "Params": [],
+        "Desc": "Toggles the AP mode that maintains the pitch and sets the pitch reference to 0°."
+      },
+      {
+        "Name": "AP_PITCH_LEVELER_OFF",
+        "Params": [],
+        "Desc": "Turns off the AP mode that maintains the pitch and sets the pitch reference to 0°."
+      },
+      {
+        "Name": "AP_PITCH_LEVELER_ON",
+        "Params": [],
+        "Desc": "Turns on the AP mode that maintains the pitch and sets the pitch reference to 0°."
+      },
+      {
+        "Name": "AP_PITCH_REF_INC_DN",
+        "Params": [],
+        "Desc": "Decrements the pitch reference for pitch hold mode"
+      },
+      {
+        "Name": "AP_PITCH_REF_INC_UP",
+        "Params": [],
+        "Desc": "Increments the pitch reference for pitch hold mode"
+      },
+      {
+        "Name": "AP_PITCH_REF_SELECT",
+        "Params": [],
+        "Desc": "Selects pitch reference for use with +/-. (There might params for this. The params field is blank?.."
+      },
+      {
+        "Name": "AP_PITCH_REF_SET",
+        "Params": [
+          {
+            "Name": "PitchValue",
+            "Type": "LONG"
+          }
+        ],
+        "Desc": "Sets the pitch reference value that will be maintained by the AP pitch hold mode. The pitch value supplied will be divided by 16384 before being multiplied by the max_pitch value."
+      },
+      {
+        "Name": "AP_RPM_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the managed index for the RPM hold mode."
+      },
+      {
+        "Name": "AP_SPD_VAR_DEC",
+        "Params": [],
+        "Desc": "Decrements airspeed hold reference"
+      },
+      {
+        "Name": "AP_SPD_VAR_INC",
+        "Params": [],
+        "Desc": "Increments airspeed hold reference"
+      },
+      {
+        "Name": "AP_SPD_VAR_SET",
+        "Params": [
+          {
+            "Name": "AirspeedKnots",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "ManagedIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets airspeed reference in knots"
+      },
+      {
+        "Name": "AP_SPD_VAR_SET_EX1",
+        "Params": [
+          {
+            "Name": "AirspeedKnots",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "ManagedIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Set the airspeed reference, in knots, for the maintain speed AP mode. The speed supplied will be divided by 100 to give you more precision with the value, for example: giving 55050 will result in an airspeed hold of 550.50 knots. For parameter [1], giving a value of 0 instead of a single index from 1 to 4, then the speed value will be copied to all managed indices."
+      },
+      {
+        "Name": "AP_SPEED_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the managed index for the speed hold mode."
+      },
+      {
+        "Name": "AP_VS_HOLD",
+        "Params": [],
+        "Desc": "Toggles the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_VS_OFF",
+        "Params": [],
+        "Desc": "Turn off the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_VS_ON",
+        "Params": [],
+        "Desc": "Turn on the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_VS_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets the AP mode that maintains a vertical speed."
+      },
+      {
+        "Name": "AP_VS_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets the managed index for the vertical speed hold mode."
+      },
+      {
+        "Name": "AP_VS_VAR_DEC",
+        "Params": [],
+        "Desc": "Decrements vertical speed reference"
+      },
+      {
+        "Name": "AP_VS_VAR_INC",
+        "Params": [],
+        "Desc": "Increments vertical speed reference"
+      },
+      {
+        "Name": "AP_VS_VAR_SET_CURRENT",
+        "Params": [],
+        "Desc": "Sets the current managed index vertical speed reference to be the current vertical speed (the current index can be set using AP_VS_SLOT_INDEX_SET). If no vertical speed indicator is on the aircraft, the vertical speed reference will calculated based on the world Y-axis velocity. Note that the resulting value will be clamped between the CFG parameters min_vertical_speed_ref and max_vertical_speed_ref."
+      },
+      {
+        "Name": "AP_VS_VAR_SET_ENGLISH",
+        "Params": [
+          {
+            "Name": "VertSpdFeet",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "ManagedIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets reference vertical speed in feet per minute"
+      },
+      {
+        "Name": "AP_VS_VAR_SET_METRIC",
+        "Params": [
+          {
+            "Name": "VertSpdMetric",
+            "Type": "ULONG"
+          },
+          {
+            "Name": "ManagedIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Sets vertical speed reference in meters per minute"
+      },
+      {
+        "Name": "AP_WING_LEVELER",
+        "Params": [],
+        "Desc": "Toggles wing leveler mode"
+      },
+      {
+        "Name": "AP_WING_LEVELER_OFF",
+        "Params": [],
+        "Desc": "Turns off wing leveler mode"
+      },
+      {
+        "Name": "AP_WING_LEVELER_ON",
+        "Params": [],
+        "Desc": "Turns wing leveler mode on"
+      },
+      {
+        "Name": "AP_PANEL_SPEED_HOLD_TOGGLE",
+        "Params": [],
+        "Desc": "Turns airspeed hold mode on with current airspeed"
+      },
+      {
+        "Name": "AP_PANEL_MACH_HOLD_TOGGLE",
+        "Params": [],
+        "Desc": "Sets mach hold reference to current mach"
+      },
+      {
+        "Name": "AUTOPILOT_DISENGAGE_SET",
+        "Params": [
+          {
+            "Name": "SetValue",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set if the AP should be disengaged or not."
+      },
+      {
+        "Name": "AUTOPILOT_DISENGAGE_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle the status of the AP disengage value."
+      },
+      {
+        "Name": "AUTOPILOT_OFF",
+        "Params": [],
+        "Desc": "Turns AP off"
+      },
+      {
+        "Name": "AUTOPILOT_ON",
+        "Params": [],
+        "Desc": "Turns AP on"
+      },
+      {
+        "Name": "ALTITUDE_SLOT_INDEX_SET",
+        "Params": [],
+        "Desc": "Sets the index for the SimVar AUTOPILOT ALTITUDE LOCK VAR which the altitude hold mode will track when captured. See alt_mode_slot_index for more information. (Again, the params are blank. This clearly should have some params...)"
+      },
+      {
+        "Name": "FLIGHT_LEVEL_CHANGE",
+        "Params": [],
+        "Desc": "Toggles the autopilot FLC mode on or off. When on, the AP will adjust the engine power to try and fly the aircraft at a pitch attitude corresponding to the desired flight profile (climb or descent), while maintaining the airspeed reference."
+      },
+      {
+        "Name": "FLIGHT_LEVEL_CHANGE_OFF",
+        "Params": [],
+        "Desc": "Turns off the autopilot FLC mode."
+      },
+      {
+        "Name": "FLIGHT_LEVEL_CHANGE_ON",
+        "Params": [],
+        "Desc": "Turn on the autopilot FLC mode. This mode adjusts engine power to fly the aircraft at a pitch attitude corresponding to the desired flight profile (climb or descent), while maintaining the airspeed reference."
+      },
+      {
+        "Name": "HEADING_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Set autopilot heading slot index."
+      },
+      {
+        "Name": "RPM_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Set autopilot RPM slot index."
+      },
+      {
+        "Name": "SPEED_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Set autopilot speed slot index."
+      },
+      {
+        "Name": "VS_SLOT_INDEX_SET",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "UINT"
+          }
+        ],
+        "Desc": "Set autopilot vertical speed slot index."
+      },
+      {
+        "Name": "AIRSPEED_BUG_SELECT",
+        "Params": [
+          {
+            "Name": "ReferenceValue",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Selects the airspeed reference for use with +/-"
+      },
+      {
+        "Name": "ALTITUDE_BUG_SELECT",
+        "Params": [
+          {
+            "Name": "ReferenceValue",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Selects the altitude reference for use with +/-"
+      },
+      {
+        "Name": "AUTO_THROTTLE_ARM",
+        "Params": [],
+        "Desc": "Toggles autothrottle arming mode"
+      },
+      {
+        "Name": "AUTO_THROTTLE_DISCONNECT",
+        "Params": [
+          {
+            "Name": "SlotIndex",
+            "Type": "SLOT_INDEX"
+          }
+        ],
+        "Desc": "Disconnect the AutoThrottle of the AP for one engine or all engines."
+      },
+      {
+        "Name": "AUTO_THROTTLE_TO_GA",
+        "Params": [],
+        "Desc": "Toggles Takeoff/Go Around mode"
+      },
+      {
+        "Name": "AUTOBRAKE_DISARM",
+        "Params": [],
+        "Desc": "Sets the autobrake switch to either : the off position (position 1) when the auto_brakes parameter is greater than 0. the RTO position (position 0) when the auto_brakes parameter is 0."
+      },
+      {
+        "Name": "AUTOBRAKE_HI_SET",
+        "Params": [],
+        "Desc": "Sets the autobrake switch to the maximum position (ie: the auto_brakes number, so that the maximum braking force will be applied)."
+      },
+      {
+        "Name": "AUTOBRAKE_LO_SET",
+        "Params": [],
+        "Desc": "Sets the autobrake switch to the minimum position (position 2, the first position after the off position)."
+      },
+      {
+        "Name": "AUTOBRAKE_MED_SET",
+        "Params": [],
+        "Desc": "Sets the autobrake switch to a medium position (the exact position will depend on the number of autobreaks defined by the auto_brakes parameter)."
+      },
+      {
+        "Name": "DECREASE_AUTOBRAKE_CONTROL",
+        "Params": [],
+        "Desc": "Decrements the autobrake level by 1. When the level reaches 0, autobreaks will be off, and the event will no longer decrement further."
+      },
+      {
+        "Name": "FLY_BY_WIRE_ELAC_TOGGLE",
+        "Params": [],
+        "Desc": "Turn on or off the fly by wire Elevators and Ailerons computer."
+      },
+      {
+        "Name": "FLY_BY_WIRE_FAC_TOGGLE",
+        "Params": [],
+        "Desc": "Turn on or off the fly by wire Flight Augmentation computer."
+      },
+      {
+        "Name": "FLY_BY_WIRE_SEC_TOGGLE",
+        "Params": [],
+        "Desc": "Turn on or off the fly by wire Spoilers and Elevators computer."
+      },
+      {
+        "Name": "GPWS_SWITCH_TOGGLE",
+        "Params": [],
+        "Desc": "Turn the ground proximity warning system (GPWS) on or off."
+      },
+      {
+        "Name": "HEADING_BUG_DEC",
+        "Params": [],
+        "Desc": "Decrements heading hold reference bug"
+      },
+      {
+        "Name": "HEADING_BUG_INC",
+        "Params": [],
+        "Desc": "Increments heading hold reference bug"
+      },
+      {
+        "Name": "HEADING_BUG_SELECT",
+        "Params": [
+          {
+            "Name": "HeadingBugIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Selects the heading bug for use with +/-"
+      },
+      {
+        "Name": "HEADING_BUG_SET",
+        "Params": [
+          {
+            "Name": "Heading",
+            "Type": "DEGREES"
+          },
+          {
+            "Name": "HeadingBugIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set the heading hold reference bug in degrees. The event takes integer values only, from 0º to 360º."
+      },
+      {
+        "Name": "AP_HEADING_BUG_SET_EX1",
+        "Params": [
+          {
+            "Name": "Heading",
+            "Type": "DEGREES"
+          },
+          {
+            "Name": "HeadingBugIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set the heading hold reference bug. This is the same as the HEADING_BUG_SET event only it permits a much greater degree of precision by permitting the input of a larger integer value that is then transformed by the simulation into a floating point heading. The way this works is that the integer value you supply is multiplied by (360/16384) to give the correct higher precision value"
+      },
+      {
+        "Name": "INCREASE_AUTOBRAKE_CONTROL",
+        "Params": [],
+        "Desc": "Increases the autobrake level by 1. When the level reaches the auto_brakes value, the event will no longer increment further."
+      },
+      {
+        "Name": "SET_AUTOBRAKE_CONTROL",
+        "Params": [
+          {
+            "Name": "AutobrakeLevel",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Uses the input parameter [0] to set the autobreak level from 0 (off) to the value set for the auto_brakes parameter (maximum breaking). If a value greater than that specified for auto_brakes is given as input, it will be clamped to the auto_brakes value."
+      },
+      {
+        "Name": "SYNC_FLIGHT_DIRECTOR_PITCH",
+        "Params": [],
+        "Desc": "Synchronizes flight director pitch with current aircraft pitch"
+      },
+      {
+        "Name": "TOGGLE_FLIGHT_DIRECTOR",
+        "Params": [],
+        "Desc": "Toggles flight director on/off"
+      },
+      {
+        "Name": "YAW_DAMPER_TOGGLE",
+        "Params": [],
+        "Desc": "Toggles yaw damper on/off"
+      },
+      {
+        "Name": "YAW_DAMPER_ON",
+        "Params": [],
+        "Desc": "Turns yaw damper on"
+      },
+      {
+        "Name": "YAW_DAMPER_OFF",
+        "Params": [],
+        "Desc": "Turns yaw damper off"
+      },
+      {
+        "Name": "YAW_DAMPER_SET",
+        "Params": [
+          {
+            "Name": "Enable",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets yaw damper on/off (1,0)"
+      },
+      {
+        "Name": "VSI_BUG_SELECT",
+        "Params": [
+          {
+            "Name": "VSIRefValue",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Selects the vertical speed reference for use with +/-"
+      }
+    ],
+    "G1000MFDEvents": [
+      {
+        "Name": "G1000_MFD_CLEAR_BUTTON",
+        "Params": [],
+        "Desc": "Clears the current input."
+      },
+      {
+        "Name": "G1000_MFD_CURSOR_BUTTON",
+        "Params": [],
+        "Desc": "Toggles on or off a screen cursor."
+      },
+      {
+        "Name": "G1000_MFD_DIRECTTO_BUTTON",
+        "Params": [],
+        "Desc": "Turn to the Direct To page."
+      },
+      {
+        "Name": "G1000_MFD_ENTER_BUTTON",
+        "Params": [],
+        "Desc": "Enters the current input."
+      },
+      {
+        "Name": "G1000_MFD_FLIGHTPLAN_BUTTON",
+        "Params": [],
+        "Desc": "The multi-function display (MFD) should display its current flight plan."
+      },
+      {
+        "Name": "G1000_MFD_GROUP_KNOB_DEC",
+        "Params": [],
+        "Desc": "Step down through the page groups."
+      },
+      {
+        "Name": "G1000_MFD_GROUP_KNOB_INC",
+        "Params": [],
+        "Desc": "Step up through the page groups."
+      },
+      {
+        "Name": "G1000_MFD_MENU_BUTTON",
+        "Params": [],
+        "Desc": "If a segmented flight plan is highlighted, activates the associated menu."
+      },
+      {
+        "Name": "G1000_MFD_PAGE_KNOB_DEC",
+        "Params": [],
+        "Desc": "Step down through the individual pages."
+      },
+      {
+        "Name": "G1000_MFD_PAGE_KNOB_INC",
+        "Params": [],
+        "Desc": "Step up through the individual pages."
+      },
+      {
+        "Name": "G1000_MFD_PROCEDURE_BUTTON",
+        "Params": [],
+        "Desc": "Turn to the Procedure page."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY1",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 1."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY2",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 2."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY3",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 3."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY4",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 4."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY5",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 5."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY6",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 6."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY7",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 7."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY8",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 8."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY9",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 9."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY10",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 10."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY11",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 11."
+      },
+      {
+        "Name": "G1000_MFD_SOFTKEY12",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 12."
+      },
+      {
+        "Name": "G1000_MFD_ZOOMIN_BUTTON",
+        "Params": [],
+        "Desc": "Zoom in on the current map."
+      },
+      {
+        "Name": "G1000_MFD_ZOOMOUT_BUTTON",
+        "Params": [],
+        "Desc": "Zoom out on the current map."
+      },
+      {
+        "Name": "G1000_PFD_CLEAR_BUTTON",
+        "Params": [],
+        "Desc": "Clears the current input."
+      },
+      {
+        "Name": "G1000_PFD_CURSOR_BUTTON",
+        "Params": [],
+        "Desc": "Turns on or off a screen cursor."
+      },
+      {
+        "Name": "G1000_PFD_DIRECTTO_BUTTON",
+        "Params": [],
+        "Desc": "Turn to the Direct To page."
+      },
+      {
+        "Name": "G1000_PFD_ENTER_BUTTON",
+        "Params": [],
+        "Desc": "Enters the current input."
+      },
+      {
+        "Name": "G1000_PFD_FLIGHTPLAN_BUTTON",
+        "Params": [],
+        "Desc": "The primary flight display (PFD) should display its current flight plan."
+      },
+      {
+        "Name": "G1000_PFD_GROUP_KNOB_INC",
+        "Params": [],
+        "Desc": "Step up through the page groups."
+      },
+      {
+        "Name": "G1000_PFD_GROUP_KNOB_DEC",
+        "Params": [],
+        "Desc": "Step down through the page groups."
+      },
+      {
+        "Name": "G1000_PFD_MENU_BUTTON",
+        "Params": [],
+        "Desc": "If a segmented flight plan is highlighted, activates the associated menu."
+      },
+      {
+        "Name": "G1000_PFD_PAGE_KNOB_INC",
+        "Params": [],
+        "Desc": "Step up through the individual pages."
+      },
+      {
+        "Name": "G1000_PFD_PAGE_KNOB_DEC",
+        "Params": [],
+        "Desc": "Step down through the individual pages."
+      },
+      {
+        "Name": "G1000_PFD_PROCEDURE_BUTTON",
+        "Params": [],
+        "Desc": "Turn to the Procedure page."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY1",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 1."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY2",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 2."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY3",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 3."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY4",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 4."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY5",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 5."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY6",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 6."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY7",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 7."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY8",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 8."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY9",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 9."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY10",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 10."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY11",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 11."
+      },
+      {
+        "Name": "G1000_PFD_SOFTKEY12",
+        "Params": [],
+        "Desc": "Initiate the action for the icon displayed in the softkey position 12."
+      },
+      {
+        "Name": "G1000_PFD_ZOOMIN_BUTTON",
+        "Params": [],
+        "Desc": "Zoom in on the current map."
+      },
+      {
+        "Name": "G1000_PFD_ZOOMOUT_BUTTON",
+        "Params": [],
+        "Desc": "Zoom out on the current map."
+      }
+    ],
+    "ElectricalEvents": [
+      {
+        "Name": "ALTERNATOR_OFF",
+        "Params": [
+          {
+            "Name": "AlternatorIndex",
+            "Type": "INT"
+          }
+        ],
+        "Desc": "Turns the indexed alternator off. The alternator index is the N index of the alternator.N definition."
+      },
+      {
+        "Name": "ALTERNATOR_ON",
+        "Params": [
+          {
+            "Name": "AlternatorIndex",
+            "Type": "INT"
+          }
+        ],
+        "Desc": "Turns the indexed alternator on. The alternator index is the N index of the alternator.N definition."
+      },
+      {
+        "Name": "ALTERNATOR_SET",
+        "Params": [
+          {
+            "Name": "Enable",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "AlternatorIndex",
+            "Type": "INT"
+          }
+        ],
+        "Desc": "Sets the indexed alternator. The alternator index is the N index of the alternator.N definition."
+      },
+      {
+        "Name": "ELECTRICAL_ALTERNATOR_BREAKER_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle the alternator breaker state with a bus. Takes two indices, the bus and the alternator index (see SimVars And Keys for more information). The bus index is the N index of the bus.N definition, and the alternator index is the N index of the alternator.N definition."
+      }
+    ],
+    "LightingEvents": [
+      {
+        "Name": "ALL_LIGHTS_TOGGLE",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle all lights"
+      },
+      {
+        "Name": "BEACON_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn beacon lights on"
+      },
+      {
+        "Name": "BEACON_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set beacon lights on/off (1,0)"
+      },
+      {
+        "Name": "CABIN_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn cabin lights off"
+      },
+      {
+        "Name": "CABIN_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn cabin lights on"
+      },
+      {
+        "Name": "CABIN_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set cabin lights on/off (1,0)"
+      },
+      {
+        "Name": "GLARESHIELD_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn glareshield lights off"
+      },
+      {
+        "Name": "GLARESHIELD_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn glareshield lights on"
+      },
+      {
+        "Name": "GLARESHIELD_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set glareshield lights on/off (1,0)"
+      },
+      {
+        "Name": "GLARESHIELD_LIGHTS_TOGGLE",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle glareshield lights"
+      },
+      {
+        "Name": "LANDING_LIGHT_DOWN",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Rotate landing light down"
+      },
+      {
+        "Name": "LANDING_LIGHT_HOME",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Return landing light to default position"
+      },
+      {
+        "Name": "LANDING_LIGHT_LEFT",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Rotate landing light left"
+      },
+      {
+        "Name": "LANDING_LIGHT_RIGHT",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Rotate landing light right"
+      },
+      {
+        "Name": "LANDING_LIGHT_UP",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Rotate landing light up"
+      },
+      {
+        "Name": "LANDING_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn landing lights on"
+      },
+      {
+        "Name": "LANDING_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn landing lights off"
+      },
+      {
+        "Name": "LANDING_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set landing lights on/off (1,0)"
+      },
+      {
+        "Name": "LANDING_LIGHTS_TOGGLE",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle landing lights"
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_INC",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Increase lighting potentiometer. Possibly the main brightness potentiometer?"
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_DEC",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Decrease lighting potentiometer. Possibly the main brightness potentiometer?"
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_SET",
+        "Params": [
+          {
+            "Name": "circuitIndex",
+            "Type": "INTEGER"
+          },
+          {
+            "Name": "potValue",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. Possibly the main brightness potentiometer?"
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_1_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_2_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_3_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_4_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_5_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_6_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_7_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_8_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_9_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_10_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_11_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_12_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_13_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_14_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_15_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_16_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_17_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_18_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_19_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_20_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_21_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_22_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_23_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_24_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_25_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_26_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_27_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_28_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_29_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LIGHT_POTENTIOMETER_30_SET",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set lighting potentiometer. This seems to be some kind of dynamic pot that can change in different aircraft."
+      },
+      {
+        "Name": "LOGO_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set logo lights on/off (1,0)"
+      },
+      {
+        "Name": "NAV_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn navigation lights on"
+      },
+      {
+        "Name": "NAV_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn navigation lights off"
+      },
+      {
+        "Name": "NAV_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set navigation lights on/off (1,0)"
+      },
+      {
+        "Name": "PANEL_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn panel lights on"
+      },
+      {
+        "Name": "PANEL_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn panel lights off"
+      },
+      {
+        "Name": "PANEL_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set panel lights on/off (1,0)"
+      },
+      {
+        "Name": "PANEL_LIGHTS_TOGGLE",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle panel lights"
+      },
+      {
+        "Name": "PEDESTRAL_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn pedestral lights off"
+      },
+      {
+        "Name": "PEDESTRAL_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn pedestral lights on"
+      },
+      {
+        "Name": "PEDESTRAL_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set pedestral lights on/off (1,0)"
+      },
+      {
+        "Name": "PEDESTRAL_LIGHTS_TOGGLE",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle pedestral lights"
+      },
+      {
+        "Name": "RECOGNITION_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set recognition lights on/off (1,0)"
+      },
+      {
+        "Name": "STROBES_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn strobe lights on"
+      },
+      {
+        "Name": "STROBES_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn strobe light off"
+      },
+      {
+        "Name": "STROBES_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set strobe lights on/off (1,0)"
+      },
+      {
+        "Name": "STROBES_TOGGLE",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle strobe lights"
+      },
+      {
+        "Name": "TAXI_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn taxi lights on"
+      },
+      {
+        "Name": "TAXI_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn taxi light off"
+      },
+      {
+        "Name": "TAXI_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set taxi lights on/off (1,0)"
+      },
+      {
+        "Name": "TOGGLE_BEACON_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle beacon lights"
+      },
+      {
+        "Name": "TOGGLE_CABIN_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle cockpit/cabin lights"
+      },
+      {
+        "Name": "TOGGLE_LOGO_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle logo lights"
+      },
+      {
+        "Name": "TOGGLE_NAV_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle navigation lights"
+      },
+      {
+        "Name": "TOGGLE_RECOGNITION_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle recognition lights"
+      },
+      {
+        "Name": "TOGGLE_TAXI_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle taxi lights"
+      },
+      {
+        "Name": "TOGGLE_WING_LIGHTS",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Toggle wing lights"
+      },
+      {
+        "Name": "WING_LIGHTS_OFF",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn wing lights off"
+      },
+      {
+        "Name": "WING_LIGHTS_ON",
+        "Params": [
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Turn wing light on"
+      },
+      {
+        "Name": "WING_LIGHTS_SET",
+        "Params": [
+          {
+            "Name": "state",
+            "Type": "BOOL"
+          },
+          {
+            "Name": "value",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Set wing lights on/off (1,0)"
+      }
+    ],
+    "SystemEvents": [
+      {
+        "Name": "1sec",
+        "Desc": "Request a notification every second."
+      },
+      {
+        "Name": "4sec",
+        "Desc": "Request a notification every four seconds."
+      },
+      {
+        "Name": "6Hz",
+        "Desc": "Request notifications six times per second. This is the same rate that joystick movement events are transmitted."
+      },
+      {
+        "Name": "AircraftLoaded",
+        "Desc": "Request a notification when the aircraft flight dynamics file is changed. These files have a .AIR extension. The filename is returned in a SIMCONNECT_RECV_EVENT_FILENAME structure."
+      },
+      {
+        "Name": "Crashed",
+        "Desc": "Request a notification if the user aircraft crashes."
+      },
+      {
+        "Name": "CrashReset",
+        "Desc": "Request a notification when the crash cut-scene has completed."
+      },
+      {
+        "Name": "FlightLoaded",
+        "Desc": "Request a notification when a flight is loaded. Note that when a flight is ended, a default flight is typically loaded, so these events will occur when flights and missions are started and finished. The filename of the flight loaded is returned in a SIMCONNECT_RECV_EVENT_FILENAME structure."
+      },
+      {
+        "Name": "FlightSaved",
+        "Desc": "Request a notification when a flight is saved correctly. The filename of the flight saved is returned in a SIMCONNECT_RECV_EVENT_FILENAME structure."
+      },
+      {
+        "Name": "FlightPlanActivated",
+        "Desc": "Request a notification when a new flight plan is activated. The filename of the activated flight plan is returned in a SIMCONNECT_RECV_EVENT_FILENAME structure."
+      },
+      {
+        "Name": "FlightPlanDeactivated",
+        "Desc": "Request a notification when the active flight plan is de-activated."
+      },
+      {
+        "Name": "Frame",
+        "Desc": "Request notifications every visual frame. Information is returned in a SIMCONNECT_RECV_EVENT structure."
+      },
+      {
+        "Name": "ObjectAdded",
+        "Desc": "Request a notification when an AI object is added to the simulation. Refer also to the SIMCONNECT_RECV_EVENT_OBJECT_ADDREMOVE structure."
+      },
+      {
+        "Name": "ObjectRemoved",
+        "Desc": "Request a notification when an AI object is removed from the simulation. Refer also to the SIMCONNECT_RECV_EVENT_OBJECT_ADDREMOVE structure."
+      },
+      {
+        "Name": "Pause",
+        "Desc": "Request notifications when the flight is paused or unpaused, and also immediately returns the current pause state (1 = paused or 0 = unpaused). The state is returned in the dwData parameter."
+      },
+      {
+        "Name": "Pause_EX1",
+        "Desc": "Request notifications when the flight is paused or unpaused, and also immediately returns the current pause state with more detail than the regular Pause system event. The state is returned in the dwData parameter, and will be one of the following defines: #define PAUSE_STATE_FLAG_OFF 0 // No Pause #define PAUSE_STATE_FLAG_PAUSE 1 // \"full\" Pause (sim + traffic + etc...) #define PAUSE_STATE_FLAG_PAUSE_WITH_SOUND 2 // FSX Legacy Pause (not used anymore) #define PAUSE_STATE_FLAG_ACTIVE_PAUSE 4 // Pause was activated using the \"Active Pause\" Button #define PAUSE_STATE_FLAG_SIM_PAUSE 8 // Pause the player sim but traffic, multi, etc... will still run"
+      },
+      {
+        "Name": "Paused",
+        "Desc": "Request a notification when the flight is paused."
+      },
+      {
+        "Name": "PauseFrame",
+        "Desc": "Request notifications for every visual frame that the simulation is paused. Information is returned in a SIMCONNECT_RECV_EVENT structure."
+      },
+      {
+        "Name": "PositionChanged",
+        "Desc": "Request a notification when the user changes the position of their aircraft through a dialog."
+      },
+      {
+        "Name": "Sim",
+        "Desc": "Request notifications when the flight is running or not, and also immediately returns the current state (1 = running or 0 = not running). The state is returned in the dwData parameter."
+      },
+      {
+        "Name": "SimStart",
+        "Desc": "The simulator is running. Typically the user is actively controlling the aircraft on the ground or in the air. However, in some cases additional pairs of SimStart/SimStop events are sent. For example, when a flight is reset the events that are sent are SimStop, SimStart, SimStop, SimStart. Also when a flight is started with the SHOW_OPENING_SCREEN value set to zero, then an additional SimStart/SimStop pair are sent before a second SimStart event is sent when the scenery is fully loaded. The opening screen provides the options to change aircraft, departure airport, and so on."
+      },
+      {
+        "Name": "SimStop",
+        "Desc": "The simulator is not running. Typically the user is loading a flight, navigating the shell or in a dialog."
+      },
+      {
+        "Name": "Sound",
+        "Desc": "Requests a notification when the master sound switch is changed. This request will also return the current state of the master sound switch immediately. A flag is returned in the dwData parameter, 0 if the switch is off, SIMCONNECT_SOUND_SYSTEM_EVENT_DATA_MASTER (0x1) if the switch is on."
+      },
+      {
+        "Name": "Unpaused",
+        "Desc": "Request a notification when the flight is un-paused."
+      },
+      {
+        "Name": "View",
+        "Desc": "Requests a notification when the user aircraft view is changed. This request will also return the current view immediately. A flag is returned in the dwData parameter, one of: SIMCONNECT_VIEW_SYSTEM_EVENT_DATA_COCKPIT_2D SIMCONNECT_VIEW_SYSTEM_EVENT_DATA_COCKPIT_VIRTUAL SIMCONNECT_VIEW_SYSTEM_EVENT_DATA_ORTHOGONAL (the map view)."
+      },
+      {
+        "Name": "",
+        "Desc": ""
+      }
+    ],
+    "LandingGearEvents": [
+      {
+        "Name": "ANTISKID_BRAKES_TOGGLE",
+        "Params": [],
+        "Desc": "Turn the anti-skid braking system on or off."
+      },
+      {
+        "Name": "AXIS_LEFT_BRAKE_SET",
+        "Params": [
+          {
+            "Name": "brakePosition",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Sets the left brake position from an axis controller (e.g. joystick) to the value given as the parameter [0], from -16383 (0 braking) to +16383 (maximum braking). Note that this is on a non-linear scale:  -16383 = 0%   -8191 = 8%   0 = 27%   +8191 = 53%   +16383 = 100%"
+      },
+      {
+        "Name": "AXIS_RIGHT_BRAKE_SET",
+        "Params": [
+          {
+            "Name": "brakePosition",
+            "Type": "INTEGER"
+          }
+        ],
+        "Desc": "Sets the right brake position from an axis controller (e.g. joystick) to the value given as the parameter [0], from -16383 (0 braking) to +16383 (maximum braking). Note that this is on a non-linear scale:  -16383 = 0%   -8191 = 8%   0 = 27%   +8191 = 53%   +16383 = 100%"
+      },
+      {
+        "Name": "BRAKES",
+        "Params": [],
+        "Desc": "Increment brake pressure"
+      },
+      {
+        "Name": "BRAKES_LEFT",
+        "Params": [],
+        "Desc": "Increments left brake pressure"
+      },
+      {
+        "Name": "BRAKES_RIGHT",
+        "Params": [],
+        "Desc": "Increments right brake pressure"
+      },
+      {
+        "Name": "GEAR_DOWN",
+        "Params": [],
+        "Desc": "Sets gear handle in DOWN position"
+      },
+      {
+        "Name": "GEAR_EMERGENCY_HANDLE_TOGGLE",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "GEAR_PUMP",
+        "Params": [],
+        "Desc": "Increments emergency gear extension"
+      },
+      {
+        "Name": "GEAR_SET",
+        "Params": [
+          {
+            "Name": "gearPosition",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Sets gear handle position up/down"
+      },
+      {
+        "Name": "GEAR_TOGGLE",
+        "Params": [],
+        "Desc": "Toggle gear handle"
+      },
+      {
+        "Name": "GEAR_UP",
+        "Params": [],
+        "Desc": "Sets gear handle in UP position"
+      },
+      {
+        "Name": "PARKING_BRAKES",
+        "Params": [],
+        "Desc": "Toggles the parking brake on/off"
+      },
+      {
+        "Name": "PARKING_BRAKE_SET",
+        "Params": [
+          {
+            "Name": "pbSet",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": "Set the parking brake on/off"
+      },
+      {
+        "Name": "RETRACT_FLOAT_SWITCH_DEC",
+        "Params": [],
+        "Desc": "If the plane has retractable floats, moves the retract position from Extend to Neutral, or Neutral to Retract."
+      },
+      {
+        "Name": "RETRACT_FLOAT_SWITCH_INC",
+        "Params": [],
+        "Desc": "If the plane has retractable floats, moves the retract position from Retract to Neutral, or Neutral to Extend."
+      }
+    ],
+    "MasterLightEvents": [
+      {
+        "Name": "MASTER_CAUTION_ACKNOWLEDGE",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_CAUTION_OFF",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_CAUTION_ON",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_CAUTION_SET",
+        "Params": [
+          {
+            "Name": "cautionSet",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_CAUTION_TOGGLE",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_WARNING_ACKNOWLEDGE",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_WARNING_OFF",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_WARNING_ON",
+        "Params": [],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_WARNING_SET",
+        "Params": [
+          {
+            "Name": "cautionSet",
+            "Type": "BOOL"
+          }
+        ],
+        "Desc": ""
+      },
+      {
+        "Name": "MASTER_WARNING_TOGGLE",
+        "Params": [],
+        "Desc": ""
+      }
+    ]
+  },
+  "InputStrings": [
+    "Backspace",
+    "Tab",
+    "VK_NUMPAD05",
+    "VK_Enter",
+    "VK_0x0E",
+    "VK_0x0F",
+    "VK_PAUSE",
+    "Caps_Lock",
+    "VK_KANA",
+    "VK_0x16",
+    "VK_JUNJA",
+    "VK_FINAL",
+    "VK_KANJI",
+    "VK_0x1A",
+    "Esc",
+    "VK_CONVERT",
+    "VK_NONCONVERT",
+    "VK_ACCEPT",
+    "VK_MODECHANGE",
+    "Space",
+    "VK_PRIOR",
+    "VK_NEXT",
+    "VK_END",
+    "VK_HOME",
+    "VK_LEFT",
+    "VK_UP",
+    "VK_RIGHT",
+    "VK_DOWN",
+    "VK_SELECT",
+    "VK_PRINT",
+    "VK_EXECUTE",
+    "Sys_Req",
+    "VK_INSERT",
+    "VK_DELETE",
+    "VK_HELP",
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "VK_LWIN",
+    "VK_RWIN",
+    "VK_APPS",
+    "VK_SLEEP",
+    "VK_NUMPAD0",
+    "VK_NUMPAD1",
+    "VK_NUMPAD2",
+    "VK_NUMPAD3",
+    "VK_NUMPAD4",
+    "VK_NUMPAD5",
+    "VK_NUMPAD6",
+    "VK_NUMPAD7",
+    "VK_NUMPAD8",
+    "VK_NUMPAD9",
+    "VK_MULTIPLY",
+    "VK_ADD",
+    "VK_SEPARATOR",
+    "VK_SUBTRACT",
+    "VK_DECIMAL",
+    "VK_DIVIDE",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F20",
+    "F21",
+    "F22",
+    "F23",
+    "F24",
+    "Pause",
+    "VK_SCROLL",
+    "VK_OEM_FJ_JISHO",
+    "VK_OEM_FJ_MASSHOU",
+    "VK_OEM_FJ_TOUROKU",
+    "VK_OEM_FJ_LOYA",
+    "VK_OEM_FJ_ROYA",
+    "VK_LSHIFT",
+    "VK_RSHIFT",
+    "VK_LCONTROL",
+    "VK_RCONTROL",
+    "VK_LMENU",
+    "VK_RMENU",
+    "VK_BROWSER_BACK",
+    "VK_BROWSER_FORWARD",
+    "VK_BROWSER_REFRESH",
+    "VK_BROWSER_STOP",
+    "VK_BROWSER_SEARCH",
+    "VK_BROWSER_FAVORITES",
+    "VK_BROWSER_HOME",
+    "VK_VOLUME_MUTE",
+    "VK_VOLUME_DOWN",
+    "VK_VOLUME_UP",
+    "VK_MEDIA_NEXT_TRACK",
+    "VK_MEDIA_PREV_TRACK",
+    "VK_MEDIA_STOP",
+    "VK_MEDIA_PLAY_PAUSE",
+    "VK_LAUNCH_MAIL",
+    "VK_LAUNCH_MEDIA_SELECT",
+    "VK_LAUNCH_APP1",
+    "VK_LAUNCH_APP2",
+    "VK_SEMICOLON",
+    "VK_PLUS",
+    "VK_COMMA",
+    "VK_MINUS",
+    "VK_PERIOD",
+    "VK_SLASH",
+    "VK_TILDE",
+    "VK_LBRACKET",
+    "VK_BACKSLASH",
+    "VK_RBRACKET",
+    "VK_QUOTE",
+    "VK_0xDF",
+    "VK_0xE0",
+    "VK_OEM_AX",
+    "VK_OEM_102",
+    "VK_ICO_HELP",
+    "VK_ICO_00",
+    "VK_PROCESSKEY",
+    "VK_ICO_CLEAR",
+    "VK_PACKET",
+    "VK_0xE8",
+    "VK_OEM_RESET",
+    "VK_OEM_JUMP",
+    "VK_OEM_PA1",
+    "VK_OEM_PA2",
+    "VK_OEM_PA3",
+    "VK_OEM_WSCTRL",
+    "VK_OEM_CUSEL",
+    "VK_OEM_ATTN",
+    "VK_OEM_FINISH",
+    "VK_OEM_COPY",
+    "VK_OEM_AUTO",
+    "VK_OEM_ENLW",
+    "VK_OEM_BACKTAB",
+    "VK_ATTN",
+    "VK_CRSEL",
+    "VK_EXSEL",
+    "VK_EREOF",
+    "VK_PLAY",
+    "VK_ZOOM",
+    "VK_PA1",
+    "VK_OEM_CLEAR"
+  ]
+}

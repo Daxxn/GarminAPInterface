@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="VariablesFilePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">B:\Code\C#\Projects\MSFS\TBMAutopilotDashboard\Variables.txt</Value>
+      <Value Profile="(Default)">Variables.txt</Value>
     </Setting>
   </Settings>
 </SettingsFile>
