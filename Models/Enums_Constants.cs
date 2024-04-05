@@ -6,11 +6,45 @@ using System.Threading.Tasks;
 
 namespace TBMAutopilotDashboard.Models.Enums
 {
+   public enum EncoderGroupEventID
+   {
+      DEFAULT = 200
+   }
+
+   public enum EncoderEventID
+   {
+      HDG_INC   = 2000,
+      HDG_DEC   = 2001,
+      ALT_INC   = 2002,
+      ALT_DEC   = 2003,
+      WHEEL_INC = 2004,
+      WHEEL_DEC = 2005,
+      CRS1_INC  = 2006,
+      CRS1_DEC  = 2007,
+      CRS2_INC  = 2008,
+      CRS2_DEC  = 2009
+   }
+
+   public enum EncoderState
+   {
+      INCREMENT = 1,
+      DECREMENT = -1,
+      STILL     = 0,
+   }
+
    public enum Messagetype
    {
-      INFO = 0,
+      INFO  = 0,
       ERROR = 1,
-      WARN = 2,
+      WARN  = 2,
+   }
+
+   public enum SIMCONNECT_GROUP_PRIORITY : uint
+   {
+      HIGHEST = 1,
+      STANDARD = 1900000000,
+      DEFAULT = 2000000000,
+      LOWEST = 4000000000
    }
 
    public enum PanelButton

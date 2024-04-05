@@ -378,7 +378,7 @@
       {
         "Name": "AUTOPILOT PITCH HOLD",
         "Type": "BOOL",
-        "Desc": "Set to True if the autopilot pitch hold has is engaged.",
+        "Desc": "Set to True if the autopilot pitch hold is engaged.",
         "Settable": false
       },
       {
