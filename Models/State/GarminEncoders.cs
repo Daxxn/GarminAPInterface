@@ -17,7 +17,7 @@ namespace TBMAutopilotDashboard.Models.State
    {
       #region Local Props
       //public int this[PanelEncoder btn] { get => States[btn]; set => States[btn] = value; }
-      //public int this[string btn] { get => States[PanelEncodernames.ToEnum[btn]]; set => States[PanelEncodernames.ToEnum[btn]] = value; }
+      //public int this[string btn] { get => States[PanelEncoderNames.ToEnum[btn]]; set => States[PanelEncoderNames.ToEnum[btn]] = value; }
       //private Dictionary<PanelEncoder, int> States { get; set; } = new Dictionary<PanelEncoder, int>();
       private GarminEncoder _hdg_Encoder;
       private GarminEncoder _alt_Encoder;
@@ -136,6 +136,14 @@ namespace TBMAutopilotDashboard.Models.State
             {
                enc.SendInputsToSim(simConnect);
             }
+         }
+      }
+
+      public void ReceiveData(byte[] buffer)
+      {
+         for (int i = 0; i < PanelEncoderNames.EncoderCount; i++)
+         {
+            _encoders[(PanelEncoder)i].SetPosition = buffer[i];
          }
       }
       #endregion

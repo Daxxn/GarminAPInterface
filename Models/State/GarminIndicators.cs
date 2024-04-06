@@ -15,17 +15,25 @@ using TBMAutopilotDashboard.Models.Enums;
 using TBMAutopilotDashboard.Models.Enums.Constants;
 using TBMAutopilotDashboard.Models.SimConnectData;
 
+using static TBMAutopilotDashboard.Models.GarminSerialController;
+
 namespace TBMAutopilotDashboard.Models.State
 {
    public class GarminIndicators : Model
    {
       #region Local Props
       private bool xfrState = false;
+      private bool _stateChanged = false;
+      public bool StateChanged => _stateChanged;
       public bool this[PanelIndicator btn]
       {
          get => States[btn];
          set
          {
+            if (States[btn] != value)
+            {
+               _stateChanged = true;
+            }
             States[btn] = value;
             OnPropertyChanged(PanelIndicatorNames.FromEnum[btn]);
          }
@@ -35,6 +43,10 @@ namespace TBMAutopilotDashboard.Models.State
          get => States[PanelIndicatorNames.ToEnum[btn]];
          set
          {
+            if (States[PanelIndicatorNames.ToEnum[btn]] != value)
+            {
+               _stateChanged = true;
+            }
             States[PanelIndicatorNames.ToEnum[btn]] = value;
             OnPropertyChanged(btn);
          }
@@ -104,6 +116,19 @@ namespace TBMAutopilotDashboard.Models.State
             XFR_L = false;
             XFR_R = true;
          }
+      }
+
+      public byte[] SendIndicators()
+      {
+         ushort temp = 0;
+         for (int i = 0; i < PanelIndicatorNames.IndicatorCount; i++)
+         {
+            var t = (Convert.ToUInt16(States[(PanelIndicator)i])) << i;
+            temp |= (ushort)t;
+         }
+         byte[] buffer = new byte[] { (byte)(temp & 0xFF), (byte)(temp >> 8) };
+         _stateChanged = false;
+         return buffer;
       }
       #endregion
 

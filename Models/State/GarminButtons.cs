@@ -20,6 +20,7 @@ namespace TBMAutopilotDashboard.Models.State
 {
    public class GarminButtons : Model
    {
+      private readonly MessageController _messages;
       private static readonly SolidColorBrush pressedColor = new SolidColorBrush(Color.FromRgb(0, 255, 0));
       private static readonly SolidColorBrush releasedColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
       #region Local Props
@@ -46,11 +47,14 @@ namespace TBMAutopilotDashboard.Models.State
       }
       private Dictionary<PanelButton, bool> States { get; set; } = new Dictionary<PanelButton, bool>();
       private Dictionary<PanelButton, ulong> Hashes { get; set; } = new Dictionary<PanelButton, ulong>();
+      private bool _stateChanged = false;
+      private bool _stateLock = false;
       #endregion
 
       #region Constructors
-      public GarminButtons()
+      public GarminButtons(MessageController messages)
       {
+         _messages = messages;
          foreach (PanelButton pb in Enum.GetValues(typeof(PanelButton)))
          {
             States.Add(pb, false);
@@ -104,21 +108,48 @@ namespace TBMAutopilotDashboard.Models.State
 
       public void SendInputsToSim(SimConnect simConnect)
       {
-         List<PanelButton> updatedButtons = new List<PanelButton>();
-         foreach (var btn in States)
+         if (_stateLock) return;
+         try
          {
-            if (Hashes[btn.Key] != 0 && btn.Value == true)
+            List<PanelButton> updatedButtons = new List<PanelButton>();
+            foreach (var btn in States)
             {
-               simConnect.SetInputEvent(Hashes[btn.Key], btn.Value);
-               updatedButtons.Add(btn.Key);
-               //OnPropertyChanged(PanelButtonNames.FromEnum[btn.Key]);
+               if (Hashes[btn.Key] != 0 && btn.Value == true)
+               {
+                  simConnect.SetInputEvent(Hashes[btn.Key], btn.Value);
+                  updatedButtons.Add(btn.Key);
+                  //OnPropertyChanged(PanelButtonNames.FromEnum[btn.Key]);
+               }
+            }
+            foreach (var btn in updatedButtons)
+            {
+               //States[btn] = false;
+               OnPropertyChanged($"{PanelButtonNames.FromEnum[btn]}_Color");
+               _stateChanged = false;
             }
          }
-         foreach (var btn in updatedButtons)
+         catch (InvalidOperationException)
          {
-            States[btn] = false;
-            OnPropertyChanged($"{PanelButtonNames.FromEnum[btn]}_Color");
+            _messages.Add(new Message("Button write collision", Messagetype.ERROR));
          }
+      }
+
+      public void ReceiveData(byte[] buffer)
+      {
+         _stateLock = true;
+         uint temp = buffer[0];
+         temp |= (uint)(buffer[1] << 8);
+         temp |= (uint)(buffer[2] << 16);
+         for (int i = 0; i < PanelButtonNames.ButtonCount; i++)
+         {
+            bool tempBtn = Convert.ToBoolean(temp & (1 << i));
+            if (this[(PanelButton)i] != tempBtn)
+            {
+               _stateChanged = true;
+            }
+            this[(PanelButton)i] = tempBtn;
+         }
+         _stateLock = false;
       }
       #endregion
 
@@ -384,6 +415,7 @@ namespace TBMAutopilotDashboard.Models.State
             OnPropertyChanged(nameof(ALT_ENC_Color));
          }
       }
+      public bool StateChanged => _stateChanged;
 
       public SolidColorBrush HDG_Color => HDG ? pressedColor : releasedColor;
       public SolidColorBrush APR_Color => APR ? pressedColor : releasedColor;

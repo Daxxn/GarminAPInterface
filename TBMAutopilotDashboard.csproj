@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,12 +75,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AsyncObservableCollection.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Models\AttributeModels\InputEventAttribute.cs" />
     <Compile Include="Models\AttributeModels\SimDataAttribute.cs" />
     <Compile Include="Models\AttributeModels\SimEventAttribute.cs" />
     <Compile Include="Models\Enums_Constants.cs" />
+    <Compile Include="Models\Exceptions\GarminSerialException.cs" />
+    <Compile Include="Models\GarminSerialController.cs" />
     <Compile Include="Models\MessageController.cs" />
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\SimConnectData\IndicatorDefinition.cs" />

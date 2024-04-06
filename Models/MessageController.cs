@@ -20,9 +20,10 @@ namespace TBMAutopilotDashboard.Models
          {
             messages[index] = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(Messages));
          }
       }
-      private ObservableCollection<Message> messages = new ObservableCollection<Message>();
+      private AsyncObservableCollection<Message> messages = new AsyncObservableCollection<Message>();
       #endregion
 
       #region Constructors
@@ -41,11 +42,13 @@ namespace TBMAutopilotDashboard.Models
          {
             messages.RemoveAt(Count - 1);
          }
+         OnPropertyChanged(nameof(Messages));
       }
 
       public void Clear()
       {
          messages.Clear();
+         OnPropertyChanged(nameof(Messages));
       }
 
       public bool Contains(Message item)
@@ -65,21 +68,26 @@ namespace TBMAutopilotDashboard.Models
 
       public bool Remove(Message item)
       {
-         return messages.Remove(item);
+         if (messages.Remove(item))
+         {
+            OnPropertyChanged(nameof(Messages));
+            return true;
+         }
+         return false;
       }
 
       IEnumerator IEnumerable.GetEnumerator()
       {
          return GetEnumerator();
       }
-      #endregion
+        #endregion
 
-      #region Methods
+        #region Methods
 
-      #endregion
+        #endregion
 
-      #region Full Props
-
-      #endregion
-   }
+        #region Full Props
+        public AsyncObservableCollection<Message> Messages => messages;
+        #endregion
+    }
 }

@@ -90,8 +90,12 @@
 
         <Border Grid.Row="1">
           <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
             <TextBlock Style="{StaticResource TitleText}">Messages</TextBlock>
-            <ItemsControl Grid.Row="3" ItemsSource="{Binding Path=Messages}">
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Path=Messages.Messages}">
               <ItemsControl.ItemTemplate>
                 <DataTemplate>
                   <TextBlock Text="{Binding Path=Text}">
@@ -135,7 +139,28 @@
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
 
-              <ComboBox
+              <Expander Grid.Row="0" Header="All Serial Devices">
+                <ListView
+                  ItemsSource="{Binding Path=OpenPortsList}"
+                  SelectedItem="{Binding Path=SelectedPort, UpdateSourceTrigger=PropertyChanged}"
+                  SelectionChanged="DeviceList_SelectionChanged"
+                >
+                  <ListView.ItemTemplate>
+                    <DataTemplate>
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition SharedSizeGroup="a"/>
+                          <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Padding="0,0,15,0" Text="{Binding Path=Name}"/>
+                        <!--<TextBlock Grid.Column="1" Text="{Binding Path=BaudRate}"/>-->
+                      </Grid>
+                    </DataTemplate>
+                  </ListView.ItemTemplate>
+                </ListView>
+              </Expander>
+
+              <!--<ComboBox
                 Grid.Row="0"
                 ItemsSource="{Binding Path=OpenPortsList, UpdateSourceTrigger=PropertyChanged}"
                 SelectedItem="{Binding Path=SelectedPort, UpdateSourceTrigger=PropertyChanged}"
@@ -153,43 +178,29 @@
                     </Grid>
                   </DataTemplate>
                 </ComboBox.ItemTemplate>
-              </ComboBox>
+              </ComboBox>-->
 
               <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
                   <ColumnDefinition Width="*"/>
-                  <ColumnDefinition Width="Auto"/>
-                  <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                   <RowDefinition Height="Auto"/>
                   <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.ColumnSpan="3" FontSize="11">Port</TextBlock>
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Path=SelectedPort.Name}"/>
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=SelectedPort.BaudRate}"/>
-                <Button Command="{Binding Path=RefreshPortsCmd}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" ToolTip="Refresh Ports">R</Button>
+                <TextBlock Grid.Column="0" Grid.Row="0" FontSize="11">Name</TextBlock>
+                <TextBox   Grid.Column="1" Grid.Row="0" Text="{Binding Path=Serial.Name, UpdateSourceTrigger=LostFocus}"/>
+                <TextBlock Grid.Column="0" Grid.Row="1" FontSize="11">Port</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=Serial.Port}"/>
               </Grid>
             </Grid>
 
-            <Grid Grid.Row="2">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-              </Grid.ColumnDefinitions>
-              <TextBlock Grid.Column="0" FontSize="11">Baud</TextBlock>
-              <TextBox Grid.Column="1" Text="{Binding Path=CustomBaudRate, UpdateSourceTrigger=PropertyChanged}">
-                <TextBox.ContextMenu>
-                  <ContextMenu Name="BaudRateMenu">
-                    <!--<MenuItem Header="Need To replace with typical Baud Rates..."/>-->
-                  </ContextMenu>
-                </TextBox.ContextMenu>
-              </TextBox>
-            </Grid>
-            <Button Grid.Row="3" Command="{Binding Path=StartSerialCmd}">Start</Button>
-            <Button Grid.Row="4" Command="{Binding Path=StopSerialCmd}">Stop</Button>
-            <Button Grid.Row="5" Command="{Binding Path=DebugStartSerialCmd}">Debug Start</Button>
+            <Button Grid.Row="2" Command="{Binding Path=StartSerialCmd}">Start</Button>
+            <Button Grid.Row="3" Command="{Binding Path=StopSerialCmd}">Stop</Button>
+            <Button Grid.Row="4" Command="{Binding Path=DebugStartSerialCmd}">Debug Start</Button>
 
             <Expander Grid.Row="6" IsExpanded="False">
               <Expander.Header>
@@ -212,17 +223,17 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="0" Grid.Row="0">Port</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=SelectedPort.Name}"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Path=Serial.Name}"/>
                 <TextBlock Grid.Column="0" Grid.Row="1">Baud</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=SelectedPort.BaudRate}"/>
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Path=Serial.BaudRate}"/>
                 <TextBlock Grid.Column="0" Grid.Row="2">Bit Size</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Path=SelectedPort.BitSize}"/>
+                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Path=Serial.DataBits}"/>
                 <TextBlock Grid.Column="0" Grid.Row="3">Stop Size</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Path=SelectedPort.StopSize}"/>
+                <TextBlock Grid.Column="1" Grid.Row="3" Text="{Binding Path=Serial.StopBit}"/>
                 <TextBlock Grid.Column="0" Grid.Row="4">Parity</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding Path=SelectedPort.Parity}"/>
+                <TextBlock Grid.Column="1" Grid.Row="4" Text="{Binding Path=Serial.ParityBit}"/>
                 <TextBlock Grid.Column="0" Grid.Row="5">Handshake</TextBlock>
-                <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding Path=SelectedPort.Handshake}"/>
+                <TextBlock Grid.Column="1" Grid.Row="5" Text="{Binding Path=Serial.HandshakeType}"/>
               </Grid>
             </Expander>
           </Grid>
@@ -315,10 +326,11 @@
       </TabControl>
 
       <!--Garmin Front Pannel-->
-      <Border Grid.Row="1" BorderThickness="0" Padding="0,2,0,0">
+      <Border Grid.Row="2" BorderThickness="0" Padding="0,2,0,0">
         <Grid>
           <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
           </Grid.RowDefinitions>
           <Canvas Grid.Row="0" Height="100" Width="450">
@@ -467,7 +479,81 @@
             <Button x:Name="CRS2_ENC_LEFT" CommandParameter="CRS2_ENC" Command="{Binding Path=PanelTestEncLCmd}" Canvas.Left="398" Canvas.Top="60" Style="{StaticResource Knob_Dir_btn}"/>
             <Button x:Name="CRS2_ENC_RIGHT" CommandParameter="CRS2_ENC" Command="{Binding Path=PanelTestEncRCmd}" Canvas.Left="418" Canvas.Top="60" Style="{StaticResource Knob_Dir_btn}"/>
           </Canvas>
+          
           <TextBlock Grid.Row="1" FontSize="10" HorizontalAlignment="Center">If buttons are stuck RED, there is a problem sending the data to the simulator.</TextBlock>
+          
+          <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            
+            <Grid Grid.Column="0">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+
+              <TextBlock Grid.Row="0" Grid.Column="0">Backlight Brightness</TextBlock>
+              <Slider
+                Grid.Row="0"
+                Grid.Column="1"
+                Minimum="0"
+                Maximum="65535"
+                x:Name="BacklghtSlider"
+                PreviewMouseUp="Slider_MouseUp"
+                Value="{Binding Path=PanelStates.Backlight, UpdateSourceTrigger=PropertyChanged}"
+              />
+              <TextBlock Grid.Row="1" Grid.Column="0"> Max Backlight Brightness</TextBlock>
+              <Slider
+                Grid.Row="1"
+                Grid.Column="1"
+                Minimum="0"
+                Maximum="65535"
+                x:Name="MaxBacklghtSlider"
+                PreviewMouseUp="Slider_MouseUp"
+                Value="{Binding Path=PanelStates.MaxBacklight, UpdateSourceTrigger=PropertyChanged}"
+              />
+            </Grid>
+            <Grid Grid.Column="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+
+              <TextBlock Grid.Row="0" Grid.Column="0">Indicator Brightness</TextBlock>
+              <Slider
+                Grid.Row="0"
+                Grid.Column="1"
+                Minimum="0"
+                Maximum="65535"
+                x:Name="IndBrghtSlider"
+                PreviewMouseUp="Slider_MouseUp"
+                Value="{Binding Path=PanelStates.IndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
+              />
+              <TextBlock Grid.Row="1" Grid.Column="0"> Max Indicator Brightness</TextBlock>
+              <Slider
+                Grid.Row="1"
+                Grid.Column="1"
+                Minimum="0"
+                Maximum="255"
+                x:Name="MaxIndBrghtSlider"
+                PreviewMouseUp="Slider_MouseUp"
+                Value="{Binding Path=PanelStates.MaxIndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Border>
     </Grid>

@@ -6,6 +6,46 @@ using System.Threading.Tasks;
 
 namespace TBMAutopilotDashboard.Models.Enums
 {
+   public enum GarminTransmitCommand : byte
+   {
+      TX_INDICATORS = 6,
+      TX_BACKLIGHT = 8,
+      TX_IND_BRIGHT = 9,
+      TX_OPTIONS = 0xF1,
+      TX_MAX_IND_BRIGHT = 10,
+   }
+
+   public enum GarminReceiveCommand : byte
+   {
+      RX_BUTTONS = 0x02,
+      RX_ENCODERS = 0x04,
+      RX_STATUS = 0xF2,
+   }
+
+   public enum GarminCommand : byte
+   {
+      RX_BUTTONS = 0x02,
+      RX_ENCODERS = 0x04,
+      RX_STREAM = 0x05,
+      RX_STATUS = 0xF2,
+      TX_INDICATORS = 0x06,
+      TX_BACKLIGHT = 0x08,
+      TX_IND_BRIGHT = 0x09,
+      TX_MAX_IND_BRIGHT = 0x0A,
+      TX_START_STREAM = 0x11,
+      TX_STOP_STREAM = 0x12,
+      TX_OPTIONS = 0xF1,
+      RX_TX_ERROR = 0xFF,
+      RX_HELLO = 0xFE
+   }
+
+   public enum CarminCmdError : byte
+   {
+      UNKNOWN_ERROR = 0,
+      UNKNOWN_COMMAND = 1,
+      MISSING_ARGS = 2,
+   }
+
    public enum EncoderGroupEventID
    {
       DEFAULT = 200
@@ -145,11 +185,40 @@ namespace TBMAutopilotDashboard.Models.Enums
 
    public enum RequestID
    {
-      INDICATOR = 0x1243
+      INPUT_EVENTS = 0x4542,
+      INDICATOR = 0x1243,
+      SYSTEM_STATE = 0x9563,
    }
 
    namespace Constants
    {
+      public static class GarminController
+      {
+         public const string GarminControllerName = "Garmin AP ComPort";
+      }
+
+      public static class SerialCommands
+      {
+         public const int ReceiveBufferSize = 56;
+         public const int TransmitBufferSize = 56;
+         public static readonly Dictionary<GarminCommand, int> CommandSize = new Dictionary<GarminCommand, int>
+         {
+            { GarminCommand.RX_BUTTONS, 3 },
+            { GarminCommand.RX_ENCODERS, 5 },
+            { GarminCommand.RX_STREAM, 8 },
+            { GarminCommand.RX_STATUS, 3 },
+            { GarminCommand.TX_INDICATORS, 2 },
+            { GarminCommand.TX_BACKLIGHT, 2 },
+            { GarminCommand.TX_IND_BRIGHT, 1 },
+            { GarminCommand.TX_MAX_IND_BRIGHT, 1 },
+            { GarminCommand.TX_START_STREAM, 0 },
+            { GarminCommand.TX_STOP_STREAM, 0 },
+            { GarminCommand.TX_OPTIONS, 1 },
+            { GarminCommand.RX_TX_ERROR, 0 },
+            { GarminCommand.RX_HELLO, 0 },
+         };
+      }
+
       public static class SimSysEventName
       {
          public const string oneSecond = "1sec";
@@ -180,6 +249,7 @@ namespace TBMAutopilotDashboard.Models.Enums
 
       public static class PanelButtonNames
       {
+         public const int ButtonCount = 18;
          public static readonly Dictionary<string, PanelButton> ToEnum = new Dictionary<string, PanelButton>
          {
             { "HDG",      PanelButton.HDG      },
@@ -249,6 +319,7 @@ namespace TBMAutopilotDashboard.Models.Enums
 
       public static class PanelIndicatorNames
       {
+         public const int IndicatorCount = 16;
          public static readonly Dictionary<string, PanelIndicator> ToEnum = new Dictionary<string, PanelIndicator>
          {
             { "HDG",   PanelIndicator.HDG   },
@@ -290,8 +361,9 @@ namespace TBMAutopilotDashboard.Models.Enums
          };
       }
 
-      public static class PanelEncodernames
+      public static class PanelEncoderNames
       {
+         public const int EncoderCount = 5;
          public static readonly Dictionary<string, PanelEncoder> ToEnum = new Dictionary<string, PanelEncoder>
          {
             { "HDG", PanelEncoder.HDG     },
