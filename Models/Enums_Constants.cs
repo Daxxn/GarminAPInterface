@@ -111,22 +111,22 @@ namespace TBMAutopilotDashboard.Models.Enums
 
    public enum PanelIndicator
    {
-      HDG,
-      APR,
-      BC,
-      NAV,
-      FD,
-      BANK,
-      AP,
-      XFR_R,
-      XFR_L,
-      YD,
-      ALT,
-      VS,
-      VNV,
-      FLC,
-      SPD,
-      ERROR
+      FLC   = 0,
+      SPD   = 1,
+      BC    = 2,
+      NAV   = 3,
+      APR   = 4,
+      HDG   = 5,
+      VS    = 6,
+      ALT   = 7,
+      VNV   = 8,
+      XFR_R = 9,
+      FD    = 10,
+      XFR_L = 11,
+      YD    = 12,
+      AP    = 13,
+      BANK  = 14,
+      ERROR = 15,
    }
 
    public enum PanelEncoder

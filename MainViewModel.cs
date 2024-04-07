@@ -58,6 +58,8 @@ namespace TBMAutopilotDashboard
       private PortStatus _selectedPort;
       private AsyncObservableCollection<PortStatus> _ports;
 
+      private int _indIndex = 0;
+
       #region Command Bindings
       public Command ConnectCmd { get; private set; }
       public Command DisconnectCmd { get; private set; }
@@ -66,7 +68,7 @@ namespace TBMAutopilotDashboard
       public Command DebugStartSerialCmd { get; private set; }
       public Command StopSerialCmd { get; private set; }
       public Command RefreshPortsCmd { get; private set; }
-      public Command GetInputEventsCMD { get; private set; }
+      public Command TestCmd { get; private set; }
       public Command PanelTestCmd { get; private set; }
       #endregion
 
@@ -96,7 +98,7 @@ namespace TBMAutopilotDashboard
          PauseCmd = new Command(Pause);
          PanelTestCmd = new Command(PanelTest);
 
-         GetInputEventsCMD = new Command(GetInputEvents);
+         TestCmd = new Command(Test);
 
          //Timer = new Timer
          //{
@@ -158,11 +160,18 @@ namespace TBMAutopilotDashboard
          PanelStates.Buttons[name] = false;
       }
 
-      private void GetInputEvents()
+      private void Test()
       {
-         if (SimConnect is null) return;
-
-         SimConnect.EnumerateInputEvents(RequestID.INPUT_EVENTS);
+         if (_indIndex < 16)
+         {
+            PanelStates.Indicators[(PanelIndicator)_indIndex] = true;
+            _indIndex++;
+         }
+         else
+         {
+            PanelStates.Indicators.ClearIndicators();
+            _indIndex = 0;
+         }
       }
 
       #region Background Setup
@@ -275,7 +284,7 @@ namespace TBMAutopilotDashboard
 
          if (_getInputData)
          {
-            GetInputEvents();
+            Test();
          }
 
          SimConnect.RequestSystemState(RequestID.SYSTEM_STATE, "Sim");

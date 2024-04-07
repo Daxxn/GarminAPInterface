@@ -83,7 +83,7 @@
                   </Style>
                 </Button.Style>
               </Button>
-              <Button Command="{Binding Path=GetInputEventsCMD}" FontSize="8">(Test) Get Input Events</Button>
+              <Button Command="{Binding Path=TestCmd}" FontSize="8">Test Command</Button>
             </StackPanel>
           </StackPanel>
         </Border>

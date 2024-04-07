@@ -43,7 +43,7 @@ namespace TBMAutopilotDashboard.Models
          _receiveDelegates = new Dictionary<GarminCommand, ReceiveDataDelegate>()
          {
             { GarminCommand.RX_STREAM, ReceiveStream },
-            { GarminCommand.RX_HELLO, ReceivedHello },
+            { GarminCommand.RX_HELLO, ReceivedHello  },
             { GarminCommand.RX_TX_ERROR, HandleError }
          };
          _panelStates = panelStates;

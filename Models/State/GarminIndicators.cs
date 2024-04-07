@@ -97,8 +97,6 @@ namespace TBMAutopilotDashboard.Models.State
             foreach (var prop in _indicatorProps)
             {
                this[prop.Name] = Convert.ToBoolean(prop.GetValue(indDef));
-               //int val = (int)prop.GetValue(indDef);
-               //this[prop.Name] = val == 1 ? true : false;
             }
          }
       }
@@ -129,6 +127,14 @@ namespace TBMAutopilotDashboard.Models.State
          byte[] buffer = new byte[] { (byte)(temp & 0xFF), (byte)(temp >> 8) };
          _stateChanged = false;
          return buffer;
+      }
+
+      public void ClearIndicators()
+      {
+         foreach (PanelIndicator ind in Enum.GetValues(typeof(PanelIndicator)))
+         {
+            States[ind] = false;
+         }
       }
       #endregion
 
