@@ -22,53 +22,97 @@ namespace TBMAutopilotDashboard.Models.State
    public class GarminIndicators : Model
    {
       #region Local Props
+      private SimConnect _simConnect;
       private bool xfrState = false;
       private bool _stateChanged = false;
       public bool StateChanged => _stateChanged;
       public bool this[PanelIndicator btn]
       {
-         get => States[btn];
+         get => Convert.ToBoolean((_stateData >> (int)btn) & 1);
          set
          {
-            if (States[btn] != value)
+            if (value)
             {
-               _stateChanged = true;
+               _stateData |= (ushort)(1 << (int)btn);
             }
-            States[btn] = value;
+            else
+            {
+               _stateData &= (ushort)(~(1 << (int)btn));
+            }
+            _stateChanged = true;
             OnPropertyChanged(PanelIndicatorNames.FromEnum[btn]);
          }
       }
+
       public bool this[string btn]
       {
-         get => States[PanelIndicatorNames.ToEnum[btn]];
+         get => this[PanelIndicatorNames.ToEnum[btn]];
          set
          {
-            if (States[PanelIndicatorNames.ToEnum[btn]] != value)
-            {
-               _stateChanged = true;
-            }
-            States[PanelIndicatorNames.ToEnum[btn]] = value;
-            OnPropertyChanged(btn);
+            //if (this[PanelIndicatorNames.ToEnum[btn]] != value)
+            //{
+            //   _stateChanged = true;
+            //}
+            this[PanelIndicatorNames.ToEnum[btn]] = value;
+            //_stateChanged = true;
+            //OnPropertyChanged(btn);
          }
       }
-      private Dictionary<PanelIndicator, bool> States { get; set; } = new Dictionary<PanelIndicator, bool>();
+
+      public bool this[int btn]
+      {
+         get => Convert.ToBoolean(_stateData & (ushort)(1 << btn));
+         set
+         {
+            if (value)
+            {
+               _stateData |= (ushort)(1 << (int)btn);
+            }
+            else
+            {
+               _stateData &= (ushort)(~(1 << (int)btn));
+            }
+            _stateChanged = true;
+            OnPropertyChanged(PanelIndicatorNames.ToName[btn]);
+         }
+      }
+
+      //private Dictionary<bool> States { get; set; } = new Dictionary<PanelIndicator, bool>();
       private PropertyInfo[] _indicatorProps;
+      private ushort _stateData = 0;
+      public ushort States
+      {
+         get => _stateData;
+         set
+         {
+            _stateData = value;
+            _stateChanged = true;
+            for (int i = 0; i < 16; i++)
+            {
+               OnPropertyChanged(PanelIndicatorNames.ToName[i]);
+            }
+         }
+      }
       #endregion
 
       #region Constructors
       public GarminIndicators()
       {
-         foreach (PanelIndicator pi in Enum.GetValues(typeof(PanelIndicator)))
-         {
-            States.Add(pi, false);
-         }
-
+         //foreach (PanelIndicator pi in Enum.GetValues(typeof(PanelIndicator)))
+         //{
+         //   States.Add(pi, false);
+         //}
          _indicatorProps = typeof(IndicatorDefinition).GetProperties(BindingFlags.Public | BindingFlags.Instance);
       }
       #endregion
 
       #region Methods
-      public void RegisterSimData(SimConnect simConnect)
+      public void ConnectModel(SimConnect simConnect)
+      {
+         _simConnect = simConnect;
+      }
+
+      public void RegisterSimData()
       {
          var props = GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
          foreach (var prop in props)
@@ -76,7 +120,7 @@ namespace TBMAutopilotDashboard.Models.State
             var dataAttr = prop.GetCustomAttribute<SimDataAttribute>();
             if (dataAttr != null)
             {
-               simConnect.AddToDataDefinition(
+               _simConnect.AddToDataDefinition(
                   StructDefinition.INDICATOR_MESSAGE,
                   dataAttr.SimDataName,
                   dataAttr.SimUnits,
@@ -86,18 +130,18 @@ namespace TBMAutopilotDashboard.Models.State
                );
             }
          }
-         simConnect.RegisterDataDefineStruct<IndicatorDefinition>(StructDefinition.INDICATOR_MESSAGE);
+         _simConnect.RegisterDataDefineStruct<IndicatorDefinition>(StructDefinition.INDICATOR_MESSAGE);
       }
 
-      public void ReadSimData(SIMCONNECT_RECV_SIMOBJECT_DATA data)
+      public void ReadSimData(IndicatorDefinition indData)
       {
-         // Cast the data to IndicatorDefinition and parse the values...
-         if (data.dwData[0] is IndicatorDefinition indDef)
+         foreach (var prop in _indicatorProps)
          {
-            foreach (var prop in _indicatorProps)
-            {
-               this[prop.Name] = Convert.ToBoolean(prop.GetValue(indDef));
-            }
+            this[prop.Name] = Convert.ToBoolean(prop.GetValue(indData));
+            //if (prop.Name != "LightingPot")
+            //{
+            //   this[prop.Name] = Convert.ToBoolean(prop.GetValue(indData));
+            //}
          }
       }
 
@@ -121,20 +165,40 @@ namespace TBMAutopilotDashboard.Models.State
          ushort temp = 0;
          for (int i = 0; i < PanelIndicatorNames.IndicatorCount; i++)
          {
-            var t = (Convert.ToUInt16(States[(PanelIndicator)i])) << i;
+            var t = (Convert.ToUInt16(this[i])) << i;
             temp |= (ushort)t;
          }
-         byte[] buffer = new byte[] { (byte)(temp & 0xFF), (byte)(temp >> 8) };
+         byte[] buffer = new byte[] { (byte)(temp >> 8), (byte)(temp & 0xFF) };
          _stateChanged = false;
          return buffer;
       }
 
+      public void SendIndicators(byte[] buffer, int offset = 1)
+      {
+         ushort temp = 0;
+         for (int i = 0; i < PanelIndicatorNames.IndicatorCount; i++)
+         {
+            var t = (Convert.ToUInt16(this[i])) << i;
+            temp |= (ushort)t;
+         }
+         //byte[] buffer = new byte[] { (byte)(temp >> 8), (byte)(temp & 0xFF) };
+         buffer[offset] = (byte)(temp >> 8);
+         buffer[offset + 1] = (byte)(temp & 0xFF);
+         _stateChanged = false;
+      }
+
       public void ClearIndicators()
       {
-         foreach (PanelIndicator ind in Enum.GetValues(typeof(PanelIndicator)))
-         {
-            States[ind] = false;
-         }
+         States = 0;
+         //foreach (PanelIndicator ind in Enum.GetValues(typeof(PanelIndicator)))
+         //{
+         //   States[ind] = false;
+         //}
+      }
+
+      public void SetIndicators()
+      {
+         States = 0xFFFF;
       }
       #endregion
 
@@ -143,172 +207,172 @@ namespace TBMAutopilotDashboard.Models.State
       [SimData("AUTOPILOT HEADING LOCK")]
       public bool HDG
       {
-         get => States[PanelIndicator.HDG];
+         get => this[PanelIndicator.HDG];
          set
          {
-            States[PanelIndicator.HDG] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.HDG] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT APPROACH HOLD")]
       public bool APR
       {
-         get => States[PanelIndicator.APR];
+         get => this[PanelIndicator.APR];
          set
          {
-            States[PanelIndicator.APR] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.APR] = value;
+            //OnPropertyChanged();
          }
       }
 
-      [SimData("AUTOPILOT BANK HOLD")]
+      [SimData("AUTOPILOT BACKCOURSE HOLD")]
       public bool BC
       {
-         get => States[PanelIndicator.BC];
+         get => this[PanelIndicator.BC];
          set
          {
-            States[PanelIndicator.BC] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.BC] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT NAV1 LOCK")]
       public bool NAV
       {
-         get => States[PanelIndicator.NAV];
+         get => this[PanelIndicator.NAV];
          set
          {
-            States[PanelIndicator.NAV] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.NAV] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT FLIGHT DIRECTOR ACTIVE")]
       public bool FD
       {
-         get => States[PanelIndicator.FD];
+         get => this[PanelIndicator.FD];
          set
          {
-            States[PanelIndicator.FD] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.FD] = value;
+            //OnPropertyChanged();
          }
       }
 
-      [SimData("AUTOPILOT MAX BANK")]
+      [SimData("AUTOPILOT BANK HOLD")]
       public bool BANK
       {
-         get => States[PanelIndicator.BANK];
+         get => this[PanelIndicator.BANK];
          set
          {
-            States[PanelIndicator.BANK] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.BANK] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT MASTER")]
       public bool AP
       {
-         get => States[PanelIndicator.AP];
+         get => this[PanelIndicator.AP];
          set
          {
-            States[PanelIndicator.AP] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.AP] = value;
+            //OnPropertyChanged();
          }
       }
 
       public bool XFR_R
       {
-         get => States[PanelIndicator.XFR_R];
+         get => this[PanelIndicator.XFR_R];
          set
          {
-            States[PanelIndicator.XFR_R] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.XFR_R] = value;
+            //OnPropertyChanged();
          }
       }
 
       public bool XFR_L
       {
-         get => States[PanelIndicator.XFR_L];
+         get => this[PanelIndicator.XFR_L];
          set
          {
-            States[PanelIndicator.XFR_L] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.XFR_L] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT YAW DAMPER")]
       public bool YD
       {
-         get => States[PanelIndicator.YD];
+         get => this[PanelIndicator.YD];
          set
          {
-            States[PanelIndicator.YD] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.YD] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT ALTITUDE LOCK")]
       public bool ALT
       {
-         get => States[PanelIndicator.ALT];
+         get => this[PanelIndicator.ALT];
          set
          {
-            States[PanelIndicator.ALT] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.ALT] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT VERTICAL HOLD")]
       public bool VS
       {
-         get => States[PanelIndicator.VS];
+         get => this[PanelIndicator.VS];
          set
          {
-            States[PanelIndicator.VS] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.VS] = value;
+            //OnPropertyChanged();
          }
       }
 
       public bool VNV
       {
-         get => States[PanelIndicator.VNV];
+         get => this[PanelIndicator.VNV];
          set
          {
-            States[PanelIndicator.VNV] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.VNV] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT FLIGHT LEVEL CHANGE")]
       public bool FLC
       {
-         get => States[PanelIndicator.FLC];
+         get => this[PanelIndicator.FLC];
          set
          {
-            States[PanelIndicator.FLC] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.FLC] = value;
+            //OnPropertyChanged();
          }
       }
 
       [SimData("AUTOPILOT MANAGED SPEED IN MACH")]
       public bool SPD
       {
-         get => States[PanelIndicator.SPD];
+         get => this[PanelIndicator.SPD];
          set
          {
-            States[PanelIndicator.SPD] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.SPD] = value;
+            //OnPropertyChanged();
          }
       }
 
       public bool ERROR
       {
-         get => States[PanelIndicator.ERROR];
+         get => this[PanelIndicator.ERROR];
          set
          {
-            States[PanelIndicator.ERROR] = value;
-            OnPropertyChanged();
+            this[PanelIndicator.ERROR] = value;
+            //OnPropertyChanged();
          }
       }
       #endregion

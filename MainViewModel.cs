@@ -225,10 +225,13 @@ namespace TBMAutopilotDashboard
             SimConnect.OnRecvEnumerateInputEvents += new SimConnect.RecvEnumerateInputEventsEventHandler(OnRecvEnumerateInputEvents);
             SimConnect.OnRecvEvent += new SimConnect.RecvEventEventHandler(OnRecvEvent);
             SimConnect.OnRecvSystemState += new SimConnect.RecvSystemStateEventHandler(SimConnect_OnRecvSystemState);
+            ConnectModels();
 
             SimConnect.SubscribeToSystemEvent(SimSystemEvent.SIM_START, SimSysEventName.simStart);
             SimConnect.SubscribeToSystemEvent(SimSystemEvent.SIM_STOP, SimSysEventName.simStop);
             SimConnect.SubscribeToSystemEvent(SimSystemEvent.EVERY_6HZ, SimSysEventName.sixHz);
+            //SimConnect.SubscribeToSystemEvent(SimSystemEvent.EVERY_FRAME, SimSysEventName.frame);
+
          }
          catch (COMException ex)
          {
@@ -255,7 +258,7 @@ namespace TBMAutopilotDashboard
          {
             Pause();
          }
-         else if (data.uEventID == (uint)SimSystemEvent.EVERY_6HZ)
+         else if (data.uEventID == (uint)SimSystemEvent.EVERY_6HZ || data.uEventID == (uint)SimSystemEvent.EVERY_FRAME)
          {
             On6HzTick();
          }
@@ -274,13 +277,18 @@ namespace TBMAutopilotDashboard
       }
 
       #region SimConnect Events
+      private void ConnectModels()
+      {
+         PanelStates.ConnectModels(SimConnect);
+      }
+
       private void OnRecvOpen(SimConnect sender, SIMCONNECT_RECV_OPEN data)
       {
          Messages.Add(new Message("Opening Simulator Connection"));
 
          Connected = true;
 
-         PanelStates.RegisterSimData(SimConnect);
+         PanelStates.RegisterSimData();
 
          if (_getInputData)
          {
@@ -351,7 +359,7 @@ namespace TBMAutopilotDashboard
       /// <param name="data">Structure containing the data from the SimConnect server. <see href="https://docs.flightsimulator.com/html/Programming_Tools/SimConnect/API_Reference/Structures_And_Enumerations/SIMCONNECT_RECV_SIMOBJECT_DATA.htm">Look here</see> for more.</param>
       private void OnRecvSimobjectData(SimConnect sender, SIMCONNECT_RECV_SIMOBJECT_DATA data)
       {
-         PanelStates.Indicators.ReadSimData(data);
+         PanelStates.ReceiveSimData(data);
       }
       #endregion
 
@@ -376,7 +384,7 @@ namespace TBMAutopilotDashboard
       private void OnTick(object _, ElapsedEventArgs __)
       {
          // Send button states...
-         PanelStates.SendButtonStates(SimConnect);
+         PanelStates.SendButtonStates();
 
          // Send indicator data request...
          SimConnect?.RequestDataOnSimObject(RequestID.INDICATOR, StructDefinition.INDICATOR_MESSAGE, (uint)_simObjectType, SIMCONNECT_PERIOD.ONCE, SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT, 0, 0, 0);
@@ -389,13 +397,15 @@ namespace TBMAutopilotDashboard
       {
          if (IsPaused || !Connected) return;
          // Send button states...
-         PanelStates.SendButtonStates(SimConnect);
+         PanelStates.SendButtonStates();
 
          // Send indicator data request...
          SimConnect?.RequestDataOnSimObject(RequestID.INDICATOR, StructDefinition.INDICATOR_MESSAGE, (uint)_simObjectType, SIMCONNECT_PERIOD.ONCE, SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT, 0, 0, 0);
+         SimConnect?.RequestDataOnSimObject(RequestID.LIGHTING, StructDefinition.LIGHTING_MESSAGE, (uint)_simObjectType, SIMCONNECT_PERIOD.ONCE, SIMCONNECT_DATA_REQUEST_FLAG.DEFAULT, 1, 1, 0);
 
          // Handle all the serial comms with the controller...
          Serial.SendIndicators();
+         Serial.SendBacklight();
       }
 
       /// <summary>

@@ -8,6 +8,7 @@ using Microsoft.FlightSimulator.SimConnect;
 
 using MVVMLibrary;
 
+using TBMAutopilotDashboard.Models.AttributeModels;
 using TBMAutopilotDashboard.Models.Enums;
 using TBMAutopilotDashboard.Models.SimConnectData;
 
@@ -16,19 +17,24 @@ namespace TBMAutopilotDashboard.Models.State
    public class GarminEncoder : Model
    {
       #region Local Props
+      private SimConnect _simConnect;
       //private static readonly InputDataMap _inputDataMap = InputDataMap.Instance;
-      private static EncoderGroupEventID GroupEventID = EncoderGroupEventID.DEFAULT;
+      private static GroupEventID GroupEventID = GroupEventID.ENCODERS;
 
       private EncoderState _state = EncoderState.STILL;
-      private byte _currPos = 0;
-      private byte _setPos = 0;
+      private uint _currPos = 0;
+      private int _posChange = 0;
 
       private string _incInputName = null;
       private string _decInputName = null;
+      private string _setInputName = null;
       private EncoderEventID _incEventID;
       private EncoderEventID _decEventID;
+      private EncoderEventID _setEventID;
 
       private bool _enabled = true;
+
+      private PanelEncoder? _name = null;
 
       //private ulong _incHash;
       //private ulong _decHash;
@@ -39,13 +45,19 @@ namespace TBMAutopilotDashboard.Models.State
       #endregion
 
       #region Methods
-      public void RegisterSimData(SimConnect simConnect)
+      public void ConnectModel(SimConnect simConnect)
       {
-         simConnect.MapClientEventToSimEvent(IncrementEventID, IncrementInputName);
-         simConnect.MapClientEventToSimEvent(DecrementEventID, DecrementInputName);
-         simConnect.AddClientEventToNotificationGroup(GroupEventID, IncrementEventID, false);
-         simConnect.AddClientEventToNotificationGroup(GroupEventID, DecrementEventID, false);
+         _simConnect = simConnect;
       }
+
+      public void RegisterSimData()
+      {
+         _simConnect.MapClientEventToSimEvent(IncrementEventID, IncrementInputName);
+         _simConnect.MapClientEventToSimEvent(DecrementEventID, DecrementInputName);
+         _simConnect.AddClientEventToNotificationGroup(GroupEventID, IncrementEventID, false);
+         _simConnect.AddClientEventToNotificationGroup(GroupEventID, DecrementEventID, false);
+      }
+
       //public void RegisterInputs()
       //{
       //   _incHash = _inputDataMap[IncrementInputName];
@@ -54,39 +66,52 @@ namespace TBMAutopilotDashboard.Models.State
 
       public void SendInputsToSim(SimConnect simConnect)
       {
-         //if (_incHash == 0 || _decHash == 0) return;
-         //simConnect.SetInputEvent(_incHash, State == EncoderState.INCREMENT);
-         //simConnect.SetInputEvent(_decHash, State == EncoderState.DECREMENT);
-
-         //if (State == EncoderState.INCREMENT)
-         //{
-         //   simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, IncrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-         //}
-         //else if (State == EncoderState.DECREMENT)
-         //{
-         //   simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, DecrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-         //}
-
-         if (CurrentPosition == SetPosition)
+         if (State == EncoderState.INCREMENT)
          {
+            simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, IncrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
             State = EncoderState.STILL;
          }
-         else if (CurrentPosition > SetPosition)
+         else if (State == EncoderState.DECREMENT)
          {
-            State = EncoderState.DECREMENT;
             simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, DecrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-            CurrentPosition--;
+            State = EncoderState.STILL;
          }
-         else
-         {
-            State = EncoderState.INCREMENT;
-            simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, IncrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
-            CurrentPosition++;
-         }
+
+         //uint newPos = (uint)(CurrentPosition + PositionChange);
+         //simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, SetEventID, newPos, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+         //State = EncoderState.STILL;
+         //PositionChange = 0;
+
+         //if (CurrentPosition == SetPosition)
+         //{
+         //   State = EncoderState.STILL;
+         //}
+         //else if (CurrentPosition > SetPosition)
+         //{
+         //   State = EncoderState.DECREMENT;
+         //   simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, DecrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+         //   CurrentPosition--;
+         //}
+         //else
+         //{
+         //   State = EncoderState.INCREMENT;
+         //   simConnect.TransmitClientEvent((uint)SIMCONNECT_SIMOBJECT_TYPE.USER, IncrementEventID, 0, GroupEventID, SIMCONNECT_EVENT_FLAG.GROUPID_IS_PRIORITY);
+         //   CurrentPosition++;
+         //}
       }
       #endregion
 
       #region Full Props
+      public PanelEncoder? Name
+      {
+         get => _name;
+         set
+         {
+            _name = value;
+            OnPropertyChanged();
+         }
+      }
+
       public EncoderState State
       {
          get => _state;
@@ -117,6 +142,16 @@ namespace TBMAutopilotDashboard.Models.State
          }
       }
 
+      public string SetInputName
+      {
+         get => _setInputName;
+         set
+         {
+            _setInputName = value;
+            OnPropertyChanged();
+         }
+      }
+
       public EncoderEventID IncrementEventID
       {
          get => _incEventID;
@@ -137,6 +172,16 @@ namespace TBMAutopilotDashboard.Models.State
          }
       }
 
+      public EncoderEventID SetEventID
+      {
+         get => _setEventID;
+         set
+         {
+            _setEventID = value;
+            OnPropertyChanged();
+         }
+      }
+
       public bool Enabled
       {
          get => _enabled;
@@ -147,17 +192,8 @@ namespace TBMAutopilotDashboard.Models.State
          }
       }
 
-      public byte SetPosition
-      {
-         get => _setPos;
-         set
-         {
-            _setPos = value;
-            OnPropertyChanged();
-         }
-      }
-
-      public byte CurrentPosition
+      [SimData("AUTOPILOT HEADING LOCK DIR", "DEGREES")]
+      public uint CurrentPosition
       {
          get => _currPos;
          set
@@ -167,7 +203,17 @@ namespace TBMAutopilotDashboard.Models.State
          }
       }
 
-      public int Difference => _currPos - _setPos;
+      public int PositionChange
+      {
+         get => _posChange;
+         set
+         {
+            _posChange = value;
+            OnPropertyChanged();
+         }
+      }
+
+      public int Difference => (int)_currPos + _posChange;
       #endregion
    }
 }

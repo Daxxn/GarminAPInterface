@@ -249,7 +249,27 @@
 
       <TabControl>
         <TabItem Header="Buttons">
-          <Grid Grid.Row="0">
+          <DataGrid ItemsSource="{Binding Path=PanelStates.Buttons.States}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
+              <DataGridTextColumn Header="Hash" Binding="{Binding Path=Hash}"/>
+              <DataGridTextColumn Header="State" Binding="{Binding Path=State}">
+                <DataGridTextColumn.CellStyle>
+                  <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Path=State}" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Path=State}" Value="False">
+                        <Setter Property="Background" Value="Transparent"/>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </DataGridTextColumn.CellStyle>
+              </DataGridTextColumn>
+            </DataGrid.Columns>
+          </DataGrid>
+          <!--<Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="Auto"/>
@@ -315,13 +335,23 @@
             <TextBlock Grid.Row="18" Grid.Column="1" Text="{Binding Path=panelStates.Buttons.HDG_ENC}"/>
             <TextBlock Grid.Row="19" Grid.Column="0">ALT PUSH</TextBlock>
             <TextBlock Grid.Row="19" Grid.Column="1" Text="{Binding Path=panelStates.Buttons.ALT_ENC}"/>
-          </Grid>
+          </Grid>-->
         </TabItem>
         <TabItem Header="Indicators">
           
         </TabItem>
         <TabItem Header="Encoders">
-          
+          <DataGrid ItemsSource="{Binding Path=PanelStates.Encoders.Encoders}" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Enabled" Binding="{Binding Path=Enabled}"/>
+              <DataGridTextColumn Header="Name" Binding="{Binding Path=Name}"/>
+              <DataGridTextColumn Header="INC Event" Binding="{Binding Path=IncrementInputName}"/>
+              <DataGridTextColumn Header="DEC Event" Binding="{Binding Path=DecrementInputName}"/>
+              <DataGridTextColumn Header="State" Binding="{Binding Path=State}"/>
+              <DataGridTextColumn Header="Set" Binding="{Binding Path=SetPosition}"/>
+              <DataGridTextColumn Header="Pos" Binding="{Binding Path=CurrentPosition}"/>
+            </DataGrid.Columns>
+          </DataGrid>
         </TabItem>
       </TabControl>
 
@@ -431,7 +461,7 @@
             <Button x:Name="BANK_BTN" CommandParameter="BANK" Command="{Binding Path=PanelTestCmd}" Canvas.Left="145" Canvas.Top="60"/>
 
             <Rectangle x:Name="XFR" Fill="{Binding Path=PanelStates.Buttons.XFR, Converter={StaticResource InvBoolColorConverter}}" Canvas.Left="198" Canvas.Top="15" Style="{StaticResource Button_Rect}"/>
-            <Polygon Canvas.Left="185" Canvas.Top="15" Points="0,5 8,0 8,10" Fill="White" Visibility="{Binding Path=PanelStates.Indicators.XFR_R, Converter={StaticResource VisibilityConverter}}"/>
+            <Polygon Canvas.Left="185" Canvas.Top="15" Points="0,5 8,0 8,10" Fill="White" Visibility="{Binding Path=PanelStates.Indicators.XFR_L, Converter={StaticResource VisibilityConverter}}"/>
             <Polygon Canvas.Left="223" Canvas.Top="15" Points="0,0 8,5 0,10" Fill="White" Visibility="{Binding Path=PanelStates.Indicators.XFR_R, Converter={StaticResource VisibilityConverter}}"/>
             <Button x:Name="XFR_BTN" CommandParameter="XFR" Command="{Binding Path=PanelTestCmd}" Canvas.Left="198" Canvas.Top="15"/>
 
@@ -501,15 +531,22 @@
               </Grid.RowDefinitions>
 
               <TextBlock Grid.Row="0" Grid.Column="0">Backlight Brightness</TextBlock>
-              <Slider
-                Grid.Row="0"
-                Grid.Column="1"
-                Minimum="0"
-                Maximum="65535"
-                x:Name="BacklghtSlider"
-                PreviewMouseUp="Slider_MouseUp"
-                Value="{Binding Path=PanelStates.Backlight, UpdateSourceTrigger=PropertyChanged}"
-              />
+              <Grid Grid.Row="0" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Slider
+                  Grid.Row="0"
+                  Grid.Column="0"
+                  Minimum="0"
+                  Maximum="65535"
+                  x:Name="BacklghtSlider"
+                  PreviewMouseUp="Slider_MouseUp"
+                  Value="{Binding Path=PanelStates.Lighting.Backlight, UpdateSourceTrigger=PropertyChanged}"
+                />
+                <TextBlock Grid.Column="1" Padding="4,0" Background="LightBlue" Text="{Binding Path=PanelStates.Lighting.BacklightPerc, UpdateSourceTrigger=PropertyChanged}"/>
+              </Grid>
               <TextBlock Grid.Row="1" Grid.Column="0"> Max Backlight Brightness</TextBlock>
               <Slider
                 Grid.Row="1"
@@ -518,7 +555,7 @@
                 Maximum="65535"
                 x:Name="MaxBacklghtSlider"
                 PreviewMouseUp="Slider_MouseUp"
-                Value="{Binding Path=PanelStates.MaxBacklight, UpdateSourceTrigger=PropertyChanged}"
+                Value="{Binding Path=PanelStates.Lighting.MaxBacklight, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>
             <Grid Grid.Column="1">
@@ -540,7 +577,7 @@
                 Maximum="65535"
                 x:Name="IndBrghtSlider"
                 PreviewMouseUp="Slider_MouseUp"
-                Value="{Binding Path=PanelStates.IndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
+                Value="{Binding Path=PanelStates.Lighting.IndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
               />
               <TextBlock Grid.Row="1" Grid.Column="0"> Max Indicator Brightness</TextBlock>
               <Slider
@@ -550,7 +587,7 @@
                 Maximum="255"
                 x:Name="MaxIndBrghtSlider"
                 PreviewMouseUp="Slider_MouseUp"
-                Value="{Binding Path=PanelStates.MaxIndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
+                Value="{Binding Path=PanelStates.Lighting.MaxIndicatorBrightness, UpdateSourceTrigger=PropertyChanged}"
               />
             </Grid>
           </Grid>

@@ -88,6 +88,9 @@
     <Compile Include="Models\SettingsModel.cs" />
     <Compile Include="Models\SimConnectData\IndicatorDefinition.cs" />
     <Compile Include="Models\SimConnectData\InputDataMap.cs" />
+    <Compile Include="Models\SimConnectData\LightingDefinition.cs" />
+    <Compile Include="Models\SimConnectData\SimVarDataDefinition.cs" />
+    <Compile Include="Models\State\GarminButtonModel.cs" />
     <Compile Include="Models\State\GarminButtons.cs" />
     <Compile Include="Models\State\GarminEncoder.cs" />
     <Compile Include="Models\State\GarminEncoders.cs" />

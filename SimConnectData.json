@@ -1128,7 +1128,7 @@
       {
         "Name": "LIGHT ON STATES",
         "Type": "bit_mask",
-        "Desc": "",
+        "Desc": "Get a bit mask containing the state of the lighting switches.",
         "Settable": false
       },
       {
@@ -3051,10 +3051,10 @@
           },
           {
             "Name": "potValue",
-            "Type": "INTEGER"
+            "Type": "PERCENT"
           }
         ],
-        "Desc": "Set lighting potentiometer. Possibly the main brightness potentiometer?"
+        "Desc": "Set lighting potentiometer based on the index. The potValue should be a float 0 - 1 value representing a percentage."
       },
       {
         "Name": "LIGHT_POTENTIOMETER_1_SET",

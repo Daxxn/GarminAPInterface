@@ -1,23 +1,7 @@
-FIXED -- The indicator data sent to the controller isnt correct.
-
-When the buttons are getting sent to the server, if the buttons from the controller comes back at the same time, it will cause a conflict and crash.
-
-Ive added a try/catch but I need to find a solution that prevents these crashes.
-
-I need to modify the system to only send data to the server when a button is pressed.
-
 The BC indicator is active when it isnt in the sim. It seems to follow the FD button?
 
-The BANK indicator activates instead of the AP indicator. Probable issues with the way the data is mapped between the controller and app.
-
-The YD ind is mapped to the SPD ind.
-
-All the indicators are correct in the app.
-
-Also seems like the stream mode isnt always activating. Button presses arent sent to the sim.
-
-Debounce needs to be added to the buttons. The can trigger way too many times.
-
-The system state changes arent staying in sync.
-
 Need to clear the controllers state when the connections are stopped.
+
+The encoder counting system doesnt work right and the server isnt fast enough to handle every frame.
+
+Need to modify the encoder counting system to find what the difference was from the lats update and use the "SET" events to set it, then send the "INC" or "DEC" events.

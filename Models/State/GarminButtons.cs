@@ -20,33 +20,45 @@ namespace TBMAutopilotDashboard.Models.State
 {
    public class GarminButtons : Model
    {
+      #region Local Props
+      private SimConnect _simConnect;
       private readonly MessageController _messages;
       private static readonly SolidColorBrush pressedColor = new SolidColorBrush(Color.FromRgb(0, 255, 0));
       private static readonly SolidColorBrush releasedColor = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
-      #region Local Props
       private static readonly InputDataMap _inputDataMap = InputDataMap.Instance;
-      public bool this[PanelButton btn]
+
+      public GarminButtonModel this[int btn]
       {
          get => States[btn];
          set
          {
             States[btn] = value;
+            OnPropertyChanged(nameof(States));
+         }
+      }
+
+      public bool this[PanelButton btn]
+      {
+         get => States[(int)btn].State;
+         set
+         {
+            States[(int)btn].State = value;
             OnPropertyChanged(PanelButtonNames.FromEnum[btn]);
-            OnPropertyChanged($"{PanelButtonNames.FromEnum[btn]}_Color");
+            OnPropertyChanged(PanelButtonNames.ColorFromEnum[btn]);
          }
       }
       public bool this[string btn]
       {
-         get => States[PanelButtonNames.ToEnum[btn]];
+         get => States[PanelButtonNames.ToIndex[btn]].State;
          set
          {
-            States[PanelButtonNames.ToEnum[btn]] = value;
+            States[PanelButtonNames.ToIndex[btn]].State = value;
             OnPropertyChanged(btn);
             OnPropertyChanged($"{btn}_Color");
          }
       }
-      private Dictionary<PanelButton, bool> States { get; set; } = new Dictionary<PanelButton, bool>();
-      private Dictionary<PanelButton, ulong> Hashes { get; set; } = new Dictionary<PanelButton, ulong>();
+      private AsyncObservableCollection<GarminButtonModel> _states = new AsyncObservableCollection<GarminButtonModel>();
+      //private Dictionary<PanelButton, ulong> Hashes { get; set; } = new Dictionary<PanelButton, ulong>();
       private bool _stateChanged = false;
       private bool _stateLock = false;
       #endregion
@@ -57,14 +69,19 @@ namespace TBMAutopilotDashboard.Models.State
          _messages = messages;
          foreach (PanelButton pb in Enum.GetValues(typeof(PanelButton)))
          {
-            States.Add(pb, false);
-            Hashes.Add(pb, 0);
+            States.Add(new GarminButtonModel(pb));
+            //Hashes.Add(pb, 0);
          }
       }
       #endregion
 
       #region Methods
-      public void RegisterSimData(SimConnect simConnect)
+      public void ConnectModel(SimConnect simConnect)
+      {
+         _simConnect = simConnect;
+      }
+
+      public void RegisterSimData()
       {
          var props = GetType().GetProperties(BindingFlags.Public);
          foreach (var prop in props)
@@ -74,7 +91,7 @@ namespace TBMAutopilotDashboard.Models.State
             {
                if (attr is SimDataAttribute dataAttr)
                {
-                  simConnect.AddToDataDefinition(
+                  _simConnect.AddToDataDefinition(
                      PanelButtonNames.ToEnum[prop.Name],
                      dataAttr.SimDataName,
                      dataAttr.SimUnits,
@@ -87,7 +104,7 @@ namespace TBMAutopilotDashboard.Models.State
          }
       }
 
-      public void InitSimInputs(SimConnect simConnect)
+      public void InitSimInputs()
       {
          // Need to decide if its worth getting the hashes from the server
          // EVERY time the app is started. The hashes dont seem to change
@@ -98,7 +115,8 @@ namespace TBMAutopilotDashboard.Models.State
             var attr = prop.GetCustomAttribute<InputEventAttribute>();
             if (attr != null)
             {
-               Hashes[PanelButtonNames.ToEnum[prop.Name]] = _inputDataMap[attr.InputEventName];
+               States[PanelButtonNames.ToIndex[prop.Name]].Hash = _inputDataMap[attr.InputEventName];
+               //Hashes[PanelButtonNames.ToEnum[prop.Name]] = _inputDataMap[attr.InputEventName];
             }
          }
 
@@ -106,31 +124,34 @@ namespace TBMAutopilotDashboard.Models.State
          //SendInputsToSim(simConnect);
       }
 
-      public void SendInputsToSim(SimConnect simConnect)
+      public void SendInputsToSim()
       {
          if (_stateLock) return;
+         if (!_stateChanged) return;
          try
          {
             List<PanelButton> updatedButtons = new List<PanelButton>();
             foreach (var btn in States)
             {
-               if (Hashes[btn.Key] != 0 && btn.Value == true)
+               if (btn.Hash != 0 && btn.State == true)
                {
-                  simConnect.SetInputEvent(Hashes[btn.Key], btn.Value);
-                  updatedButtons.Add(btn.Key);
+                  _simConnect.SetInputEvent(btn.Hash, btn.State);
+                  btn.UpdateState();
+                  //updatedButtons.Add(btn.Key);
                   //OnPropertyChanged(PanelButtonNames.FromEnum[btn.Key]);
                }
             }
-            foreach (var btn in updatedButtons)
-            {
-               //States[btn] = false;
-               OnPropertyChanged($"{PanelButtonNames.FromEnum[btn]}_Color");
-               _stateChanged = false;
-            }
+            _stateChanged = false;
+            //foreach (var btn in updatedButtons)
+            //{
+            //   //States[btn] = false;
+            //   OnPropertyChanged($"{PanelButtonNames.FromEnum[btn]}_Color");
+            //   _stateChanged = false;
+            //}
          }
          catch (InvalidOperationException)
          {
-            _messages.Add(new Message("Button write collision", Messagetype.ERROR));
+            _messages.Add(new Message("Button collision!", Messagetype.ERROR));
          }
       }
 
@@ -154,17 +175,27 @@ namespace TBMAutopilotDashboard.Models.State
       #endregion
 
       #region Full Props
+      public AsyncObservableCollection<GarminButtonModel> States
+      {
+         get => _states;
+         set
+         {
+            _states = value;
+            OnPropertyChanged();
+         }
+      }
+
       [SimData("AUTOPILOT HEADING LOCK")]
       [SimEvent("AP_HDG_HOLD")]
       [InputEvent("AUTOPILOT_Heading_Mode")]
       public bool HDG
       {
-         get => States[PanelButton.HDG];
+         get => this[PanelButton.HDG];
          set
          {
-            States[PanelButton.HDG] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(HDG_Color));
+            this[PanelButton.HDG] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(HDG_Color));
          }
       }
 
@@ -173,12 +204,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Approach_Button")]
       public bool APR
       {
-         get => States[PanelButton.APR];
+         get => this[PanelButton.APR];
          set
          {
-            States[PanelButton.APR] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(APR_Color));
+            this[PanelButton.APR] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(APR_Color));
          }
       }
 
@@ -187,12 +218,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Backcourse_Button")]
       public bool BC
       {
-         get => States[PanelButton.BC];
+         get => this[PanelButton.BC];
          set
          {
-            States[PanelButton.BC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(BC_Color));
+            this[PanelButton.BC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(BC_Color));
          }
       }
 
@@ -204,12 +235,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_NAV_Mode")]
       public bool NAV
       {
-         get => States[PanelButton.NAV];
+         get => this[PanelButton.NAV];
          set
          {
-            States[PanelButton.NAV] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(NAV_Color));
+            this[PanelButton.NAV] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(NAV_Color));
          }
       }
 
@@ -218,12 +249,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_FD_1_Mode")]
       public bool FD
       {
-         get => States[PanelButton.FD];
+         get => this[PanelButton.FD];
          set
          {
-            States[PanelButton.FD] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(FD_Color));
+            this[PanelButton.FD] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(FD_Color));
          }
       }
 
@@ -232,12 +263,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Bank_Button")]
       public bool BANK
       {
-         get => States[PanelButton.BANK];
+         get => this[PanelButton.BANK];
          set
          {
-            States[PanelButton.BANK] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(BANK_Color));
+            this[PanelButton.BANK] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(BANK_Color));
          }
       }
 
@@ -246,12 +277,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_AP_1")]
       public bool AP
       {
-         get => States[PanelButton.AP];
+         get => this[PanelButton.AP];
          set
          {
-            States[PanelButton.AP] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(AP_Color));
+            this[PanelButton.AP] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(AP_Color));
          }
       }
 
@@ -263,12 +294,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Transfer_Mode")]
       public bool XFR
       {
-         get => States[PanelButton.XFR];
+         get => this[PanelButton.XFR];
          set
          {
-            States[PanelButton.XFR] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(XFR_Color));
+            this[PanelButton.XFR] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(XFR_Color));
          }
       }
 
@@ -277,12 +308,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_YD_Button")]
       public bool YD
       {
-         get => States[PanelButton.YD];
+         get => this[PanelButton.YD];
          set
          {
-            States[PanelButton.YD] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(YD_Color));
+            this[PanelButton.YD] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(YD_Color));
          }
       }
 
@@ -291,12 +322,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Altitude_Button")]
       public bool ALT
       {
-         get => States[PanelButton.ALT];
+         get => this[PanelButton.ALT];
          set
          {
-            States[PanelButton.ALT] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ALT_Color));
+            this[PanelButton.ALT] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(ALT_Color));
          }
       }
 
@@ -305,12 +336,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_VS_Mode")]
       public bool VS
       {
-         get => States[PanelButton.VS];
+         get => this[PanelButton.VS];
          set
          {
-            States[PanelButton.VS] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(VS_Color));
+            this[PanelButton.VS] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(VS_Color));
          }
       }
 
@@ -321,12 +352,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_VNAV_Mode")]
       public bool VNV
       {
-         get => States[PanelButton.VNV];
+         get => this[PanelButton.VNV];
          set
          {
-            States[PanelButton.VNV] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(VNV_Color));
+            this[PanelButton.VNV] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(VNV_Color));
          }
       }
 
@@ -335,12 +366,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_FLC_Button")]
       public bool FLC
       {
-         get => States[PanelButton.FLC];
+         get => this[PanelButton.FLC];
          set
          {
-            States[PanelButton.FLC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(FLC_Color));
+            this[PanelButton.FLC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(FLC_Color));
          }
       }
 
@@ -349,12 +380,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_SpeedToggle_Mode")]
       public bool SPD
       {
-         get => States[PanelButton.SPD];
+         get => this[PanelButton.SPD];
          set
          {
-            States[PanelButton.SPD] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(SPD_Color));
+            this[PanelButton.SPD] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(SPD_Color));
          }
       }
 
@@ -365,12 +396,12 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Course_1_Sync")]
       public bool CRS1_ENC
       {
-         get => States[PanelButton.CRS1_ENC];
+         get => this[PanelButton.CRS1_ENC];
          set
          {
-            States[PanelButton.CRS1_ENC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(CRS1_ENC_Color));
+            this[PanelButton.CRS1_ENC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(CRS1_ENC_Color));
          }
       }
 
@@ -381,24 +412,24 @@ namespace TBMAutopilotDashboard.Models.State
       [InputEvent("AUTOPILOT_Course_2_Sync")]
       public bool CRS2_ENC
       {
-         get => States[PanelButton.CRS2_ENC];
+         get => this[PanelButton.CRS2_ENC];
          set
          {
-            States[PanelButton.CRS2_ENC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(CRS2_ENC_Color));
+            this[PanelButton.CRS2_ENC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(CRS2_ENC_Color));
          }
       }
 
       [InputEvent("AUTOPILOT_Heading_Sync")]
       public bool HDG_ENC
       {
-         get => States[PanelButton.HDG_ENC];
+         get => this[PanelButton.HDG_ENC];
          set
          {
-            States[PanelButton.HDG_ENC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(HDG_ENC_Color));
+            this[PanelButton.HDG_ENC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(HDG_ENC_Color));
          }
       }
 
@@ -407,14 +438,15 @@ namespace TBMAutopilotDashboard.Models.State
       /// </summary>
       public bool ALT_ENC
       {
-         get => States[PanelButton.ALT_ENC];
+         get => this[PanelButton.ALT_ENC];
          set
          {
-            States[PanelButton.ALT_ENC] = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(ALT_ENC_Color));
+            this[PanelButton.ALT_ENC] = value;
+            //OnPropertyChanged();
+            //OnPropertyChanged(nameof(ALT_ENC_Color));
          }
       }
+
       public bool StateChanged => _stateChanged;
 
       public SolidColorBrush HDG_Color => HDG ? pressedColor : releasedColor;

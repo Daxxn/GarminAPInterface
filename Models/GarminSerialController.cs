@@ -32,7 +32,7 @@ namespace TBMAutopilotDashboard.Models
       private string _name = GarminController.GarminControllerName;
       private string _port = null;
       private bool _streamActive = false;
-      public bool IsOpen => serialPort.IsOpen;
+      public bool IsOpen => serialPort != null ? serialPort.IsOpen : false;
       #endregion
 
       #region Constructors
@@ -131,32 +131,37 @@ namespace TBMAutopilotDashboard.Models
          if (serialPort?.IsOpen != true) return;
          if (!_panelStates.Indicators.StateChanged) return;
          _txBuffer[0] = (byte)GarminCommand.TX_INDICATORS;
-         _panelStates.Indicators.SendIndicators().CopyTo(_txBuffer, 1);
-         serialPort.Write(_txBuffer.ToArray(), 0, 3);
+         //_panelStates.Indicators.SendIndicators().CopyTo(_txBuffer, 1);
+         _panelStates.Indicators.SendIndicators(_txBuffer, 1);
+         serialPort.Write(_txBuffer, 0, 3);
       }
 
       public void SendBacklight()
       {
          if (serialPort?.IsOpen != true) return;
+         if (!_panelStates.Lighting.StateChanged) return;
          _txBuffer[0] = (byte)GarminCommand.TX_BACKLIGHT;
-         _panelStates.SendBacklight().CopyTo(_txBuffer, 1);
-         serialPort.Write(_txBuffer.ToArray(), 0, 3);
+         //_panelStates.SendBacklight().CopyTo(_txBuffer, 1);
+         //_panelStates.SendBacklight(_txBuffer, 1);
+         _panelStates.Lighting.SendToDevice(_txBuffer);
+         serialPort.Write(_txBuffer, 0, 3);
       }
 
       public void SendIndBrightness()
       {
          if (serialPort?.IsOpen != true) return;
          _txBuffer[0] = (byte)GarminCommand.TX_IND_BRIGHT;
-         _panelStates.SendIndBrightness().CopyTo(_txBuffer, 1);
-         serialPort.Write(_txBuffer.ToArray(), 0, 3);
+         //_panelStates.SendIndBrightness().CopyTo(_txBuffer, 1);
+         _panelStates.Lighting.SendIndBrightness(_txBuffer);
+         serialPort.Write(_txBuffer, 0, 3);
       }
 
       public void SendMaxIndBrightness()
       {
          if (serialPort?.IsOpen != true) return;
          _txBuffer[0] = (byte)GarminCommand.TX_MAX_IND_BRIGHT;
-         _txBuffer[1] = _panelStates.MaxIndicatorBrightness;
-         serialPort.Write(_txBuffer.ToArray(), 0, 2);
+         _panelStates.Lighting.SendMaxIndBrightness(_txBuffer);
+         serialPort.Write(_txBuffer, 0, 2);
       }
 
       public void SendSettings()
@@ -173,7 +178,7 @@ namespace TBMAutopilotDashboard.Models
       public void PollEncoders()
       {
          if (serialPort?.IsOpen != true) return;
-         SendCommand(GarminCommand.RX_ENCODERS);
+         SendCommand(GarminCommand.RX_ENC_POS);
       }
 
       public void PollSettings()
@@ -190,8 +195,8 @@ namespace TBMAutopilotDashboard.Models
       private void ReceiveStream(byte[] buffer)
       {
          var bufferList = buffer.ToList();
-         _panelStates.Buttons.ReceiveData(bufferList.Take(3).ToArray());
-         _panelStates.Encoders.ReceiveData(bufferList.GetRange(3, 5).ToArray());
+         _panelStates.Buttons.ReceiveData(bufferList.Take(SerialCommands.CommandSize[GarminCommand.RX_BUTTONS]).ToArray());
+         _panelStates.Encoders.ReceiveData(bufferList.GetRange(SerialCommands.CommandSize[GarminCommand.RX_BUTTONS], SerialCommands.CommandSize[GarminCommand.RX_ENC_POS]).ToArray());
       }
 
       private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)

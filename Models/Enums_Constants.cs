@@ -25,7 +25,8 @@ namespace TBMAutopilotDashboard.Models.Enums
    public enum GarminCommand : byte
    {
       RX_BUTTONS = 0x02,
-      RX_ENCODERS = 0x04,
+      RX_ENC_DIR = 0x03,
+      RX_ENC_POS = 0x04,
       RX_STREAM = 0x05,
       RX_STATUS = 0xF2,
       TX_INDICATORS = 0x06,
@@ -39,37 +40,78 @@ namespace TBMAutopilotDashboard.Models.Enums
       RX_HELLO = 0xFE
    }
 
-   public enum CarminCmdError : byte
+   public enum GarminCommandLength : int
    {
-      UNKNOWN_ERROR = 0,
-      UNKNOWN_COMMAND = 1,
-      MISSING_ARGS = 2,
+      BUTTONS     = 3,
+      ENCODERS    = 5,
+      ENCODER_DIR = 2,
+      STATUS      = 3,
+      STREAM      = BUTTONS + ENCODERS
    }
 
-   public enum EncoderGroupEventID
+   public enum GarminCmdError : byte
    {
-      DEFAULT = 200
+      UNKNOWN_ERROR   = 0,
+      UNKNOWN_COMMAND = 1,
+      MISSING_ARGS    = 2,
+   }
+
+   public enum GroupEventID
+   {
+      ENCODERS = 200,
+      LIGHTING = 400,
    }
 
    public enum EncoderEventID
    {
-      HDG_INC   = 2000,
-      HDG_DEC   = 2001,
-      ALT_INC   = 2002,
-      ALT_DEC   = 2003,
-      WHEEL_INC = 2004,
-      WHEEL_DEC = 2005,
-      CRS1_INC  = 2006,
-      CRS1_DEC  = 2007,
-      CRS2_INC  = 2008,
-      CRS2_DEC  = 2009
+      HDG_INC   = 2001,
+      HDG_DEC   = 2002,
+      HDG_SET   = 2000,
+      ALT_INC   = 2101,
+      ALT_DEC   = 2102,
+      ALT_SET   = 2100,
+      WHEEL_INC = 2201,
+      WHEEL_DEC = 2202,
+      WHEEL_SET = 2200,
+      CRS1_INC  = 2301,
+      CRS1_DEC  = 2302,
+      CRS1_SET  = 2300,
+      CRS2_INC  = 2401,
+      CRS2_DEC  = 2402,
+      CRS2_SET  = 2400,
+   }
+
+   public enum LightingEventID
+   {
+      LGHT_SET,
+      LGHT_INC,
+      LGHT_DEC,
+      LGHT_TOGGLE
+   }
+
+   public enum LightingIndex
+   {
+      NONE,
+      BEACON,
+      STROBE,
+      NAV_POS,
+      PANEL,
+      LANDING,
+      TAXI,
+      RECOGNITION,
+      WING,
+      LOGO,
+      CABIN,
+      PEDESTAL,
+      GLARESHIELD,
+      AMBIENT
    }
 
    public enum EncoderState
    {
-      INCREMENT = 1,
-      DECREMENT = -1,
-      STILL     = 0,
+      INCREMENT = 2,
+      DECREMENT = 0,
+      STILL     = 1,
    }
 
    public enum Messagetype
@@ -81,10 +123,10 @@ namespace TBMAutopilotDashboard.Models.Enums
 
    public enum SIMCONNECT_GROUP_PRIORITY : uint
    {
-      HIGHEST = 1,
+      HIGHEST  = 1,
       STANDARD = 1900000000,
-      DEFAULT = 2000000000,
-      LOWEST = 4000000000
+      DEFAULT  = 2000000000,
+      LOWEST   = 4000000000
    }
 
    public enum PanelButton
@@ -131,11 +173,11 @@ namespace TBMAutopilotDashboard.Models.Enums
 
    public enum PanelEncoder
    {
-      CRS1,
-      CRS2,
       HDG,
       ALT,
-      WHEEL
+      WHEEL,
+      CRS1,
+      CRS2,
    }
 
    public enum SimTypes
@@ -180,7 +222,9 @@ namespace TBMAutopilotDashboard.Models.Enums
 
    public enum StructDefinition
    {
-      INDICATOR_MESSAGE = 0x42
+      INDICATOR_MESSAGE = 0x42,
+      LIGHTING_MESSAGE = 0x24,
+      SIMVAR_DATA_MSG = 0x2442,
    };
 
    public enum RequestID
@@ -188,6 +232,7 @@ namespace TBMAutopilotDashboard.Models.Enums
       INPUT_EVENTS = 0x4542,
       INDICATOR = 0x1243,
       SYSTEM_STATE = 0x9563,
+      LIGHTING = 0x4863,
    }
 
    namespace Constants
@@ -204,7 +249,7 @@ namespace TBMAutopilotDashboard.Models.Enums
          public static readonly Dictionary<GarminCommand, int> CommandSize = new Dictionary<GarminCommand, int>
          {
             { GarminCommand.RX_BUTTONS, 3 },
-            { GarminCommand.RX_ENCODERS, 5 },
+            { GarminCommand.RX_ENC_POS, 5 },
             { GarminCommand.RX_STREAM, 8 },
             { GarminCommand.RX_STATUS, 3 },
             { GarminCommand.TX_INDICATORS, 2 },
@@ -272,6 +317,28 @@ namespace TBMAutopilotDashboard.Models.Enums
             { "ALT_ENC",  PanelButton.ALT_ENC  },
          };
 
+         public static readonly Dictionary<string, int> ToIndex = new Dictionary<string, int>
+         {
+            { "HDG",      0  },
+            { "APR",      1  },
+            { "BC",       2  },
+            { "NAV",      3  },
+            { "FD",       4  },
+            { "BANK",     5  },
+            { "AP",       6  },
+            { "XFR",      7  },
+            { "YD",       8  },
+            { "ALT",      9  },
+            { "VS",       10 },
+            { "VNV",      11 },
+            { "FLC",      12 },
+            { "SPD",      13 },
+            { "CRS1_ENC", 14 },
+            { "CRS2_ENC", 15 },
+            { "HDG_ENC",  16 },
+            { "ALT_ENC",  17 },
+         };
+
          public static readonly Dictionary<PanelButton, string> FromEnum = new Dictionary<PanelButton, string>
          {
             { PanelButton.HDG,      "HDG"      },
@@ -292,6 +359,28 @@ namespace TBMAutopilotDashboard.Models.Enums
             { PanelButton.CRS2_ENC, "CRS2_ENC" },
             { PanelButton.HDG_ENC,  "HDG_ENC"  },
             { PanelButton.ALT_ENC,  "ALT_ENC"  },
+         };
+
+         public static readonly Dictionary<PanelButton, string> ColorFromEnum = new Dictionary<PanelButton, string>
+         {
+            { PanelButton.HDG,      "HDG_Color"      },
+            { PanelButton.APR,      "APR_Color"      },
+            { PanelButton.BC,       "BC_Color"       },
+            { PanelButton.NAV,      "NAV_Color"      },
+            { PanelButton.FD,       "FD_Color"       },
+            { PanelButton.BANK,     "BANK_Color"     },
+            { PanelButton.AP,       "AP_Color"       },
+            { PanelButton.XFR,      "XFR_Color"      },
+            { PanelButton.YD,       "YD_Color"       },
+            { PanelButton.ALT,      "ALT_Color"      },
+            { PanelButton.VS,       "VS_Color"       },
+            { PanelButton.VNV,      "VNV_Color"      },
+            { PanelButton.FLC,      "FLC_Color"      },
+            { PanelButton.SPD,      "SPD_Color"      },
+            { PanelButton.CRS1_ENC, "CRS1_ENC_Color" },
+            { PanelButton.CRS2_ENC, "CRS2_ENC_Color" },
+            { PanelButton.HDG_ENC,  "HDG_ENC_Color"  },
+            { PanelButton.ALT_ENC,  "ALT_ENC_Color"  },
          };
 
          public static readonly Dictionary<string, string> FromButton = new Dictionary<string, string>
@@ -340,6 +429,46 @@ namespace TBMAutopilotDashboard.Models.Enums
             { "ERROR", PanelIndicator.ERROR },
          };
 
+         public static readonly Dictionary<string, int> ToIndex = new Dictionary<string, int>
+         {
+            { "HDG",   5  },
+            { "APR",   4  },
+            { "BC",    2  },
+            { "NAV",   3  },
+            { "FD",    10 },
+            { "BANK",  14 },
+            { "AP",    13 },
+            { "XFR_R", 9  },
+            { "XFR_L", 11 },
+            { "YD",    12 },
+            { "ALT",   7  },
+            { "VS",    6  },
+            { "VNV",   8  },
+            { "FLC",   0  },
+            { "SPD",   1  },
+            { "ERROR", 15 },
+         };
+
+         public static readonly Dictionary<int, string> ToName = new Dictionary<int, string>
+         {
+            { 5,  "HDG"   },
+            { 4,  "APR"   },
+            { 2,  "BC"    },
+            { 3,  "NAV"   },
+            { 10, "FD"    },
+            { 14, "BANK"  },
+            { 13, "AP"    },
+            { 9,  "XFR_R" },
+            { 11, "XFR_L" },
+            { 12, "YD"    },
+            { 7,  "ALT"   },
+            { 6,  "VS"    },
+            { 8,  "VNV"   },
+            { 0,  "FLC"   },
+            { 1,  "SPD"   },
+            { 15, "ERROR" },
+         };
+
          public static readonly Dictionary<PanelIndicator, string> FromEnum = new Dictionary<PanelIndicator, string>
          {
             { PanelIndicator.HDG,   "HDG"   },
@@ -371,6 +500,24 @@ namespace TBMAutopilotDashboard.Models.Enums
             { "CRS1", PanelEncoder.CRS1   },
             { "CRS2", PanelEncoder.CRS2   },
             { "WHEEL", PanelEncoder.WHEEL },
+         };
+
+         public static readonly Dictionary<PanelEncoder, int> ToIndex = new Dictionary<PanelEncoder, int>
+         {
+            { PanelEncoder.HDG, (int)PanelEncoder.HDG },
+            { PanelEncoder.ALT, (int)PanelEncoder.ALT },
+            { PanelEncoder.CRS1, (int)PanelEncoder.CRS1 },
+            { PanelEncoder.CRS2, (int)PanelEncoder.CRS2 },
+            { PanelEncoder.WHEEL, (int)PanelEncoder.WHEEL },
+         };
+
+         public static readonly Dictionary<PanelEncoder, string> ToPropName = new Dictionary<PanelEncoder, string>
+         {
+            { PanelEncoder.HDG, "HDG_ENC" },
+            { PanelEncoder.ALT, "ALT_ENC" },
+            { PanelEncoder.CRS1, "CRS1_ENC" },
+            { PanelEncoder.CRS2, "CRS2_ENC" },
+            { PanelEncoder.WHEEL, "WHEEL_ENC" },
          };
       }
    }

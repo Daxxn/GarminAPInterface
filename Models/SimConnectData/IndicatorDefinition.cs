@@ -27,6 +27,8 @@ namespace TBMAutopilotDashboard.Models.SimConnectData
       public int VS   { get; set; }
       public int FLC  { get; set; }
       public int SPD  { get; set; }
+      //public double PanelPot { get; set; } // Value is from 0 - 100.
+      //public int Panel { get; set; }
       //public int VNV { get; set; }
       //public int XFR_R { get; set; }
       //public int XFR_L { get; set; }
