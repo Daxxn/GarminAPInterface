@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TBMAutopilotDashboard"
         xmlns:utils="clr-namespace:TBMAutopilotDashboard.Models.Utils"
         mc:Ignorable="d"
-        Title="MainWindow" Height="480" Width="630">
+        Title="Garmin Autopilot Dashboard" Height="480" Width="630">
   <Window.Resources>
     <Style TargetType="TextBlock" x:Key="TitleText">
       <Setter Property="FontWeight" Value="DemiBold"/>
